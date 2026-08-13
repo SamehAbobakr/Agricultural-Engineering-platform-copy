@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>منصة كلية الهندسة الزراعية - جامعة الأزهر</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         الهيدر
+    ========================== -->
+    <header class="main-header">
+
+        <div class="header-container">
+
+            <div class="logo-area">
+                <span class="logo-icon">🚜</span>
+
+                <h1>
+                    كلية الهندسة الزراعية - جامعة الأزهر
+                </h1>
+            </div>
+
+            <div class="user-info-area">
+                <span class="welcome-text">
+                    مرحباً بك فى منصة الهندسة الزراعية
+                </span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         الهيكل الرئيسي
+    ========================== -->
+    <div class="app-layout">
+
+
+        <!-- =========================
+             القائمة الجانبية
+        ========================== -->
+
+        <aside class="sidebar" id="sidebarContainer">
+
+            <div class="sidebar-brand">
+                قائمة التنقل
+            </div>
+
+
+            <ul class="sidebar-menu">
+
+                <!-- الرئيسية -->
+                <li class="menu-item active"
+                    onclick="resetView()">
+
+                    <span class="menu-icon">🏠</span>
+
+                    الرئيسية
+
+                </li>
+
+
+                <!-- الفرقة الأولى -->
+                <li class="menu-item"
+                    onclick="selectGrade('الفرقة الأولى')">
+
+                    <span class="menu-icon">📘</span>
+
+                    الفرقة الأولى
+
+                </li>
+
+
+                <!-- الفرقة الثانية -->
+                <li class="menu-item"
+                    onclick="selectGrade('الفرقة الثانية')">
+
+                    <span class="menu-icon">📗</span>
+
+                    الفرقة الثانية
+
+                </li>
+
+
+                <!-- الفرقة الثالثة -->
+                <li class="menu-item"
+                    onclick="selectGrade('الفرقة الثالثة')">
+
+                    <span class="menu-icon">📙</span>
+
+                    الفرقة الثالثة
+
+                </li>
+
+
+                <!-- الفرقة الرابعة -->
+                <li class="menu-item"
+                    onclick="selectGrade('الفرقة الرابعة')">
+
+                    <span class="menu-icon">📕</span>
+
+                    الفرقة الرابعة
+
+                </li>
+
+
+                <!-- =========================
+                     سبورة الشرح
+                     مستقلة عن الفرق
+                ========================== -->
+
+                <li class="menu-item"
+                    onclick="openWhiteboard()">
+
+                    <span class="menu-icon">🖊️</span>
+
+                    سبورة الشرح
+
+                </li>
+
+            </ul>
+
+        </aside>
+
+
+        <!-- =========================
+             مساحة المحتوى
+        ========================== -->
+
+        <main class="content-area" id="contentArea">
+
+            <!--
+                المحتوى يتم إنشاؤه
+                بواسطة JavaScript
+            -->
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================
+         الفوتر
+    ========================== -->
+
+    <footer class="main-footer">
+
+        <p>
+            جميع الحقوق محفوظة © كلية الهندسة الزراعية - جامعة الأزهر 2026
+        </p>
+
+
+        <div class="footer-contact">
+
+            <h4 class="footer-contact-title">
+                تواصل معنا
+            </h4>
+
+
+            <div class="footer-social-links">
+
+                <a
+                    href="https://wa.me/201551743249"
+                    class="footer-social-link whatsapp-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+
+                    <span class="social-icon">
+                        💬
+                    </span>
+
+                    <span>
+                        تواصل معنا عبر واتساب
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         Supabase
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- إعدادات Supabase -->
+    <script src="js/supabase-config.js"></script>
+
+
+    <!-- ملفات المشروع -->
+    <script src="js/data.js"></script>
+
+    <script src="js/navigation.js"></script>
+
+    <script src="js/ui.js"></script>
+
+    <script src="js/ai-assistant.js"></script>
+
+    <script src="js/app.js"></script>
+
+
+</body>
+
+</html>

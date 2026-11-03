@@ -57,3 +57,27 @@
     max-width: 100%;
     min-width: 0;
 }
+
+
+
+
+
+/* =========================================
+   الفوتر الرئيسي
+========================================= */
+
+.main-footer {
+    width: 100%;
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.main-footer p {
+    margin: 0;
+}

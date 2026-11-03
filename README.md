@@ -7,13 +7,14 @@
 | المسار | وظيفته |
 |---|---|
 | `index.html` | الصفحة الرئيسية (التطبيق كله يُرسم داخل `#contentArea` بواسطة JS) |
-| `about/about.html` + `about/room.html` | «عن الكلية» = نظام الغرف والمهمات: القائمة والتقدم في `about.html`، والغرفة الواحدة في `room.html?room=<slug>`. الكود في `about/js/rooms-*.js` والتنسيق المعزول (أصناف `rm-*`) في `about/css/rooms.css` |
+| `about/about.html` + `about/room.html` |  المسار التعليمي = نظام الغرف والمهمات: القائمة والتقدم في `about.html`، والغرفة الواحدة في `room.html?room=<slug>`. الكود في `about/js/rooms-*.js` والتنسيق المعزول (أصناف `rm-*`) في `about/css/rooms.css` |
 | `tools/tools.html` | صفحة الأدوات، و`tools/study-timer.html` مؤقت المذاكرة (مستقل) |
 | `student_dashboard/` | لوحة إنجاز الطالب (`index.html` + `css/style.css` + `js/app.js`) |
 | `faculty/` | دليل أعضاء هيئة التدريس: `faculty.html` + `css/faculty.css` + `js/` (سبعة ملفات صغيرة، انظر أدناه) |
 | `css/` | تنسيقات مشتركة بين كل الصفحات (`variables.css` فيه الألوان والوضع الليلي/النهاري) |
 | `js/` | سكربتات الصفحة الرئيسية + الملفان المشتركان `auth.js` (المصادقة) و`header.js` (الهيدر والثيم) |
 | `assets/images/icons/` | صور الأيقونات |
+| `js/support-widget.js` + `css/support-widget.css` | **زر الدعم والتواصل الموحد** (شخصية المنصة + قائمة «دعم المنصة/تواصل معنا» + نافذة الدعم). مكوّن واحد يُحقن في كل صفحة بسطر واحد `<script src="…/js/support-widget.js"></script>` قبل `</body>`، ويحمّل تنسيقه وصورته (`assets/images/support-mascot.png`) تلقائيًا. كل أصنافه تبدأ بـ `sw-`. رقم واتساب وفودافون كاش في أعلى الملف. لا تنسخ HTML الزر في الصفحات. |
 | `login.html` / `reset-password.html` | صفحتا الدخول/إنشاء الحساب/نسيت كلمة المرور، وتعيين كلمة مرور جديدة (واجهتهما `js/login.js` و`js/reset-password.js` وتنسيقهما `css/auth.css`) |
 | `database/` | ملفات SQL لجداول Supabase (تُشغَّل يدويًا من SQL Editor): `faculty_members.sql` و`student_dashboard.sql` و`rooms_progress.sql` (الجداول والأمان) ثم `rooms_seed.sql` (محتوى تجريبي) |
 | `docs/` | التوثيق: `auth-setup.md` (إعداد Google وSMTP وRedirect URLs) و`email-templates/` (قوالب رسائل التأكيد والاستعادة بالعربية) |

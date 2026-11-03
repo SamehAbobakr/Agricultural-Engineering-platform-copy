@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0f172a">
-<title>عن الكلية | منصة الهندسة الزراعية</title>
+<title>المسار التعليمي  | منصة الهندسة الزراعية</title>
 <meta name="description" content="استكشف كلية الهندسة الزراعية من خلال غرف ومهمات تفاعلية، واجمع النقاط وتابع تقدمك.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +61,7 @@ document.documentElement.classList.add('js');
         <nav class="main-nav" aria-label="التنقل الرئيسي">
     <a href="../index.html" class="nav-link" data-nav="home">الرئيسية</a>
     <a href="../student_dashboard/index.html" class="nav-link" data-nav="dashboard">لوحة إنجاز الطالب</a>
-    <a href="../about/about.html" class="nav-link active" aria-current="page" data-nav="about">عن الكلية</a>
+    <a href="../about/about.html" class="nav-link active" aria-current="page" data-nav="about">المسار التعليمي</a>
     <a href="../faculty/faculty.html" class="nav-link" data-nav="faculty">دليل هيئة التدريس</a>
     <a href="../community/community.html" class="nav-link" data-nav="community">مجتمع الطلاب والخريجين</a>
     <a href="../tools/tools.html" class="nav-link" data-nav="tools">الأدوات</a>
@@ -121,7 +121,7 @@ document.documentElement.classList.add('js');
     <div class="drawer-nav">
             <a href="../index.html" class="drawer-nav-link" data-nav="home"><span class="link-icon">🏠</span>الرئيسية</a>
             <a href="../student_dashboard/index.html" class="drawer-nav-link" data-nav="dashboard"><span class="link-icon">📊</span>لوحة إنجاز الطالب</a>
-            <a href="../about/about.html" class="drawer-nav-link active" data-nav="about"><span class="link-icon">🎓</span>عن الكلية</a>
+            <a href="../about/about.html" class="drawer-nav-link active" data-nav="about"><span class="link-icon">🎓</span>المسار التعليمي</a>
             <a href="../faculty/faculty.html" class="drawer-nav-link" data-nav="faculty"><span class="link-icon">👨‍🏫</span>دليل هيئة التدريس</a>
             <a href="../community/community.html" class="drawer-nav-link" data-nav="community"><span class="link-icon">🤝</span>مجتمع الطلاب والخريجين</a>
             <a href="../tools/tools.html" class="drawer-nav-link" data-nav="tools"><span class="link-icon">🛠️</span>الأدوات</a>
@@ -140,21 +140,38 @@ document.documentElement.classList.add('js');
 
 <main class="rm-main">
 
-    <!-- مساحة تعريفية -->
-    <section class="rm-hero" aria-labelledby="rmHeroTitle">
-        <div class="rm-wrap">
-            <p class="rm-hero-kicker">رحلة استكشاف تفاعلية</p>
-            <h1 id="rmHeroTitle">استكشف <span>كلية الهندسة الزراعية</span> غرفةً غرفة</h1>
-            <p class="rm-hero-lead">
-                ادخل أي غرفة، واقرأ مهماتها واحدة تلو الأخرى، وتعرّف على الكلية وأقسامها ومجالات العمل.
-                التصفح مفتوح للجميع، وعند تسجيل الدخول يُحفظ تقدمك وتجمع نقاطك.
-            </p>
-            <div class="rm-hero-actions">
-                <a class="rm-btn" href="#rooms">ابدأ الاستكشاف</a>
-            </div>
-            <ul class="rm-hero-stats" id="rmHeroStats" aria-label="أرقام عامة عن الغرف"></ul>
+    
+<!-- مساحة تعريفية -->
+<section class="rm-hero" aria-labelledby="rmHeroTitle">
+    <div class="rm-wrap">
+
+        <p class="rm-hero-kicker">مسار معرفي تفاعلي</p>
+
+        <h1 id="rmHeroTitle">
+            ابدأ <span>مسارك التعليمي</span> غرفةً غرفة
+        </h1>
+
+        <p class="rm-hero-lead">
+            <strong class="rm-hero-subtitle">تعلّم، استكشف، وأنجز</strong>
+            ادخل الغرف التعليمية، واستكشف محتواها ومهماتها خطوةً بخطوة.
+            تعرّف على تخصصات الهندسة الزراعية ومجالاتها المختلفة،
+            واختبر معلوماتك من خلال الأنشطة والتقييمات.
+            <span class="rm-hero-note">
+                التصفح متاح للجميع، وعند تسجيل الدخول يُحفظ تقدمك
+                وتُسجّل نقاطك وإنجازاتك.
+            </span>
+        </p>
+
+        <div class="rm-hero-actions">
+            <a class="rm-btn" href="#rooms">ابدأ رحلتك التعليمية</a>
         </div>
-    </section>
+
+        <ul class="rm-hero-stats" id="rmHeroStats"
+            aria-label="أرقام عامة عن الغرف"></ul>
+
+    </div>
+</section>
+
 
     <!-- تقدم الطالب (مسجّل) أو دعوة تسجيل الدخول (زائر) -->
     <section class="rm-wrap rm-progress-section" id="rmProgress" aria-live="polite"></section>
@@ -187,5 +204,8 @@ document.documentElement.classList.add('js');
 <script src="js/rooms-api.js"></script>
 <script src="js/rooms-progress.js"></script>
 <script src="js/rooms-list.js"></script>
+
+<!-- زر الدعم والتواصل الموحد (مكوّن مشترك) -->
+<script src="../js/support-widget.js"></script>
 </body>
 </html>

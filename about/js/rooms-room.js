@@ -145,7 +145,7 @@ const RoomsRoomApp = {
 
         document.title =
             app.room.title +
-            ' | عن الكلية | منصة الهندسة الزراعية';
+            ' | المسار التعليمي  | منصة الهندسة الزراعية';
 
         app.renderHead();
         app.renderTasks();
@@ -293,7 +293,7 @@ const RoomsRoomApp = {
             attrs: { 'aria-label': 'مسار التنقل' }
         }, [
             el('a', {
-                text: 'عن الكلية',
+                text: 'المسار التعليمي',
                 attrs: { href: 'about.html' }
             }),
             el('span', {

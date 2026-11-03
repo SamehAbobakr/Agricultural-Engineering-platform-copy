@@ -1,5 +1,5 @@
 // =========================================
-// صفحة «عن الكلية» — قائمة الغرف + ملخص تقدم الطالب
+// صفحة  المسار التعليمي — قائمة الغرف + ملخص تقدم الطالب
 // تعتمد على: auth.js (PlatformAuth) ثم rooms-config / utils / api / progress
 // =========================================
 
@@ -340,7 +340,8 @@ const RoomsListApp = {
                 ]));
             }
 
-            const side = el('span', {
+
+const side = el('span', {
     className: 'rm-card-side',
     attrs: { 'aria-hidden': 'true' }
 }, [
@@ -363,13 +364,13 @@ grid.appendChild(el('a', {
     side,
     body,
     el('span', {
-        className: 'rm-task-chevron',
+        className: 'rm-card-arrow',
+        text: '‹',
         attrs: { 'aria-hidden': 'true' }
-    }, [
-        el('span', { className: 'rm-task-play-icon' })
-    ])
+    })
 ]));
-        });
+});
+
     }
 };
 

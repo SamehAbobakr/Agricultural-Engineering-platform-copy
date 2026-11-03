@@ -1,0 +1,519 @@
+
+/* =========================================
+   AI Assistant - New Interface
+   All styles are isolated inside aiAssistantArea
+========================================= */
+
+#aiAssistantArea {
+    margin: 24px 0;
+    width: 100%;
+}
+
+#aiAssistantArea .ai-assistant-shell {
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    font-family: var(--font-main);
+}
+
+/* Header */
+
+#aiAssistantArea .ai-assistant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 24px;
+    background: linear-gradient(
+        120deg,
+        rgba(16, 185, 129, 0.13),
+        rgba(59, 130, 246, 0.12)
+    );
+    border-bottom: 1px solid var(--border-color);
+}
+
+#aiAssistantArea .ai-assistant-brand,
+#aiAssistantArea .ai-assistant-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#aiAssistantArea .ai-assistant-logo {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    color: white;
+    font-size: 25px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+}
+
+#aiAssistantArea .ai-assistant-brand-text h2 {
+    margin: 0 0 4px;
+    color: var(--text-main);
+    font-size: 19px;
+}
+
+#aiAssistantArea .ai-assistant-brand-text p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+#aiAssistantArea .ai-assistant-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+#aiAssistantArea .ai-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+#aiAssistantArea .ai-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#aiAssistantArea .ai-close-btn:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* Main Content */
+
+#aiAssistantArea .ai-assistant-content {
+    padding: 26px;
+}
+
+#aiAssistantArea .ai-welcome-section {
+    margin-bottom: 23px;
+}
+
+#aiAssistantArea .ai-welcome-label {
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#aiAssistantArea .ai-welcome-section h3 {
+    margin: 8px 0;
+    color: var(--text-main);
+    font-size: 23px;
+}
+
+#aiAssistantArea .ai-welcome-section p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* Subject Card */
+
+#aiAssistantArea .ai-subject-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 17px;
+    margin-bottom: 27px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    background: rgba(128, 128, 128, 0.045);
+}
+
+#aiAssistantArea .ai-subject-icon {
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.12);
+    font-size: 20px;
+}
+
+#aiAssistantArea .ai-subject-details {
+    min-width: 0;
+}
+
+#aiAssistantArea .ai-subject-label {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+#aiAssistantArea .ai-subject-details h4 {
+    margin: 4px 0 10px;
+    color: var(--text-main);
+    font-size: 16px;
+}
+
+#aiAssistantArea .ai-subject-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#aiAssistantArea .ai-subject-meta span {
+    padding: 5px 9px;
+    border-radius: 7px;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* Suggestions */
+
+#aiAssistantArea .ai-suggestions-section {
+    margin-bottom: 25px;
+}
+
+#aiAssistantArea .ai-suggestions-section > h4 {
+    margin: 0 0 13px;
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+#aiAssistantArea .ai-suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+#aiAssistantArea .ai-suggestion-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+    background: transparent;
+    color: var(--text-main);
+    text-align: right;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#aiAssistantArea .ai-suggestion-btn:hover {
+    border-color: var(--primary-color);
+    background: rgba(16, 185, 129, 0.06);
+    transform: translateY(-2px);
+}
+
+#aiAssistantArea .ai-suggestion-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.12);
+    font-size: 17px;
+}
+
+#aiAssistantArea .ai-suggestion-btn strong,
+#aiAssistantArea .ai-suggestion-btn small {
+    display: block;
+}
+
+#aiAssistantArea .ai-suggestion-btn strong {
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+#aiAssistantArea .ai-suggestion-btn small {
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+/* Input */
+
+#aiAssistantArea .ai-input-section > label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#aiAssistantArea .ai-input-wrapper {
+    position: relative;
+}
+
+#aiAssistantArea #aiQueryInput {
+    display: block;
+    width: 100%;
+    min-height: 105px;
+    padding: 15px 16px 55px;
+    box-sizing: border-box;
+    resize: vertical;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    outline: none;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 13px;
+    line-height: 1.8;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#aiAssistantArea #aiQueryInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+#aiAssistantArea #aiQueryInput::placeholder {
+    color: var(--text-muted);
+    opacity: 0.75;
+}
+
+#aiAssistantArea .ai-send-btn {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#aiAssistantArea .ai-send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.25);
+}
+
+#aiAssistantArea .ai-input-hint {
+    margin: 8px 0 20px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+/* Response */
+
+#aiAssistantArea .ai-response-area {
+    min-height: 105px;
+    padding: 17px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: rgba(128, 128, 128, 0.035);
+}
+
+#aiAssistantArea .ai-empty-response {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 95px;
+    text-align: center;
+}
+
+#aiAssistantArea .ai-response-icon {
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-size: 25px;
+}
+
+#aiAssistantArea .ai-empty-response strong {
+    color: var(--text-main);
+    font-size: 13px;
+}
+
+#aiAssistantArea .ai-empty-response p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* Answer */
+
+#aiAssistantArea .ai-answer-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding-bottom: 13px;
+    margin-bottom: 13px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#aiAssistantArea .ai-answer-icon {
+    display: grid;
+    place-items: center;
+    width: 37px;
+    height: 37px;
+    border-radius: 11px;
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--primary-color);
+    font-size: 20px;
+}
+
+#aiAssistantArea .ai-answer-heading strong,
+#aiAssistantArea .ai-answer-heading small {
+    display: block;
+}
+
+#aiAssistantArea .ai-answer-heading strong {
+    color: var(--text-main);
+    font-size: 13px;
+}
+
+#aiAssistantArea .ai-answer-heading small {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+#aiAssistantArea .ai-answer-text {
+    color: var(--text-main);
+    font-size: 13px;
+    line-height: 2;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Loading and Errors */
+
+#aiAssistantArea .ai-loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    min-height: 75px;
+}
+
+#aiAssistantArea .ai-loading-spinner {
+    width: 23px;
+    height: 23px;
+    flex-shrink: 0;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: ai-spin 0.8s linear infinite;
+}
+
+#aiAssistantArea .ai-loading-state strong {
+    color: var(--text-main);
+    font-size: 12px;
+}
+
+#aiAssistantArea .ai-loading-state p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+#aiAssistantArea .ai-error-container,
+#aiAssistantArea .ai-error-message {
+    padding: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.06);
+    color: #ef4444;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+#aiAssistantArea .ai-error-container p {
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+}
+
+@keyframes ai-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    #aiAssistantArea {
+        margin: 15px 0;
+    }
+
+    #aiAssistantArea .ai-assistant-shell {
+        border-radius: 15px;
+    }
+
+    #aiAssistantArea .ai-assistant-header {
+        padding: 15px;
+    }
+
+    #aiAssistantArea .ai-assistant-logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+    }
+
+    #aiAssistantArea .ai-assistant-brand-text h2 {
+        font-size: 15px;
+    }
+
+    #aiAssistantArea .ai-assistant-brand-text p {
+        font-size: 10px;
+    }
+
+    #aiAssistantArea .ai-assistant-status {
+        display: none;
+    }
+
+    #aiAssistantArea .ai-assistant-content {
+        padding: 17px;
+    }
+
+    #aiAssistantArea .ai-welcome-section h3 {
+        font-size: 19px;
+    }
+
+    #aiAssistantArea .ai-suggestions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #aiAssistantArea .ai-subject-card {
+        padding: 13px;
+    }
+
+    #aiAssistantArea .ai-subject-meta {
+        gap: 6px;
+    }
+}

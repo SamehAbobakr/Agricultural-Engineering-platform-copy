@@ -1,208 +1,485 @@
+
 // js/ai-assistant.js
 
-/**
- * نظام المساعد الذكي الخاص بالمادة الدراسية
- * مسؤول بالكامل عن واجهة وإدارة تفاعلات الذكاء الاصطناعي مع الطالب داخل المادة.
- * مهيأ للربط المستقبلي مع Supabase, OpenAI API, و Gemini API.
- */
+const SMART_SERVICE_URL =
+    "https://kegawnvzoimaddnziotv.supabase.co/functions/v1/smart-service";
+
+
 class SubjectAIAssistant {
+
     constructor(subject, metadata = {}) {
+
         if (!subject) {
             console.error("خطأ: لم يتم تمرير بيانات المادة إلى المساعد الذكي.");
-            this.subject = { name: 'مادة غير معروفة', content: {} };
+
+            this.subject = {
+                name: "مادة غير معروفة",
+                content: {}
+            };
+
         } else {
             this.subject = subject;
         }
 
         this.metadata = {
-            grade: metadata.grade || subject.grade || 'غير محدد',
-            department: metadata.department || subject.dept || 'غير محدد',
-            term: metadata.term || subject.term || 'غير محدد'
+            grade: metadata.grade || this.subject.grade || "غير محدد",
+            department: metadata.department || this.subject.department || "غير محدد",
+            term: metadata.term || this.subject.term || "غير محدد"
         };
     }
 
-    /**
-     * استخراج سياق وبيانات المادة كاملة لاستخدامها في نماذج الذكاء الاصطناعي أو Supabase
-     */
+
     getSubjectContext() {
+
         return {
-            name: this.subject.name || 'مادة غير محددة',
+            name: this.subject.name || "مادة غير محددة",
             grade: this.metadata.grade,
             department: this.metadata.department,
             term: this.metadata.term,
-            lecturesCount: this.subject.lectures || 0,
-            pdfsCount: this.subject.pdfs || 0,
-            prof: this.subject.prof || 'غير متوفر',
-            content: this.subject.content || {}
+            prof: this.subject.professor || "غير متوفر"
         };
     }
 
-    /**
-     * توليد واجهة المستخدم الخاصة بالمساعد الذكي متوافقة مع تصميم المنصة و RTL
-     */
+
     renderAssistantUI() {
+
         const context = this.getSubjectContext();
 
         return `
-            <div class="fade-in material-view" style="margin-top: 15px; margin-bottom: 20px; direction: rtl; text-align: right; border: 1px solid var(--primary-color, #2e7d32); background: var(--card-bg, #fff);">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color, #eaeaea); padding-bottom: 10px; margin-bottom: 15px;">
-                    <h3 style="margin: 0; color: var(--primary-color);">🤖 المساعد الذكي لمادة: ${context.name}</h3>
-                    <button class="tab-btn" onclick="closeAIAssistant()" style="padding: 4px 10px; font-size: 12px; cursor: pointer;">✕ إغلاق</button>
-                </div>
-                
-                <p class="card-info" style="margin-bottom: 15px;">
-                    <strong>الفرقة:</strong> ${context.grade} | <strong>القسم:</strong> ${context.department} | <strong>الترم:</strong> ${context.term} | <strong>المحاضرات:</strong> ${context.lecturesCount} | <strong>الملفات:</strong> ${context.pdfsCount}
-                </p>
+            <section class="ai-assistant-shell" dir="rtl">
 
-                <div style="margin-bottom: 15px;">
-                    <p style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">أزرار اقتراح جاهزة:</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <button class="tab-btn" style="padding: 6px 12px; font-size: 12px; cursor: pointer;" onclick="aiAssistantInstance.handlePresetQuery('شرح المحاضرة')">شرح المحاضرة</button>
-                        <button class="tab-btn" style="padding: 6px 12px; font-size: 12px; cursor: pointer;" onclick="aiAssistantInstance.handlePresetQuery('تلخيص المادة')">تلخيص المادة</button>
-                        <button class="tab-btn" style="padding: 6px 12px; font-size: 12px; cursor: pointer;" onclick="aiAssistantInstance.handlePresetQuery('إنشاء أسئلة امتحان')">إنشاء أسئلة امتحان</button>
-                        <button class="tab-btn" style="padding: 6px 12px; font-size: 12px; cursor: pointer;" onclick="aiAssistantInstance.handlePresetQuery('مراجعة أهم النقاط')">مراجعة أهم النقاط</button>
-                        <button class="tab-btn" style="padding: 6px 12px; font-size: 12px; cursor: pointer;" onclick="aiAssistantInstance.handlePresetQuery('حل استفسار الطالب')">حل استفسار الطالب</button>
+                <!-- Header -->
+                <header class="ai-assistant-header">
+
+                    <div class="ai-assistant-brand">
+
+                        <div class="ai-assistant-logo">
+                            <span class="ai-cap-icon">✦</span>
+                        </div>
+
+                        <div class="ai-assistant-brand-text">
+                            <h2>المساعد الأكاديمي</h2>
+                            <p>مساعدك في فهم مواد الكلية</p>
+                        </div>
+
                     </div>
+
+                    <div class="ai-assistant-header-actions">
+
+                        <span class="ai-assistant-status">
+                            <span class="ai-status-dot"></span>
+                            جاهز للمساعدة
+                        </span>
+
+                        <button
+                            type="button"
+                            class="ai-close-btn"
+                            onclick="closeAIAssistant()"
+                            aria-label="إغلاق المساعد"
+                            title="إغلاق"
+                        >
+                            &times;
+                        </button>
+
+                    </div>
+
+                </header>
+
+
+                <!-- Main Content -->
+                <div class="ai-assistant-content">
+
+                    <div class="ai-welcome-section">
+
+                        <span class="ai-welcome-label">
+                            مساعدك الدراسي
+                        </span>
+
+                        <h3>أهلاً بك، كيف يمكنني مساعدتك؟</h3>
+
+                        <p>
+                            اسأل عن أي موضوع في المادة، وسأساعدك على فهمه
+                            وتبسيطه خطوة بخطوة.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Subject Information -->
+                    <div class="ai-subject-card">
+
+                        <div class="ai-subject-icon">📚</div>
+
+                        <div class="ai-subject-details">
+
+                            <span class="ai-subject-label">
+                                المادة الحالية
+                            </span>
+
+                            <h4>${escapeHtml(context.name)}</h4>
+
+                            <div class="ai-subject-meta">
+
+                                <span>
+                                    الفرقة: ${escapeHtml(context.grade)}
+                                </span>
+
+                                <span>
+                                    القسم: ${escapeHtml(context.department)}
+                                </span>
+
+                                <span>
+                                    الترم: ${escapeHtml(context.term)}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Suggestions -->
+                    <div class="ai-suggestions-section">
+
+                        <h4>يمكنك البدء بأحد هذه الأسئلة</h4>
+
+                        <div class="ai-suggestions-grid">
+
+                            <button
+                                type="button"
+                                class="ai-suggestion-btn"
+                                onclick="setAIPrompt('اشرح لي أهم المفاهيم الأساسية في هذه المادة')"
+                            >
+                                <span class="ai-suggestion-icon">📖</span>
+                                <span>
+                                    <strong>شرح موضوع</strong>
+                                    <small>بسّط لي أحد موضوعات المادة</small>
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="ai-suggestion-btn"
+                                onclick="setAIPrompt('ساعدني في حل سؤال من هذه المادة مع شرح الخطوات')"
+                            >
+                                <span class="ai-suggestion-icon">✍️</span>
+                                <span>
+                                    <strong>حل سؤال</strong>
+                                    <small>اشرح لي الحل خطوة بخطوة</small>
+                                </span>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Question Input -->
+                    <div class="ai-input-section">
+
+                        <label for="aiQueryInput">
+                            اكتب سؤالك هنا
+                        </label>
+
+                        <div class="ai-input-wrapper">
+
+                            <textarea
+                                id="aiQueryInput"
+                                placeholder="مثلاً: اشرح لي هذا الموضوع بطريقة مبسطة..."
+                                rows="3"
+                            ></textarea>
+
+                            <button
+                                type="button"
+                                class="ai-send-btn"
+                                onclick="triggerAIAssistantQuery()"
+                                aria-label="إرسال السؤال"
+                                title="إرسال السؤال"
+                            >
+                                <span>➤</span>
+                            </button>
+
+                        </div>
+
+                        <p class="ai-input-hint">
+                            حاول كتابة سؤالك بشكل واضح للحصول على إجابة أدق.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Response -->
+                    <div
+                        id="aiResponseArea"
+                        class="ai-response-area"
+                        aria-live="polite"
+                    >
+
+                        <div class="ai-empty-response">
+
+                            <div class="ai-response-icon">✧</div>
+
+                            <strong>الإجابة ستظهر هنا</strong>
+
+                            <p>
+                                اكتب سؤالك واضغط إرسال لبدء المحادثة.
+                            </p>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div style="margin-bottom: 15px;">
-                    <textarea id="aiQueryInput" class="inner-search" placeholder="اكتب سؤالك أو استفسارك هنا..." style="width: 100%; height: 90px; padding: 10px; resize: vertical; border-radius: 6px; box-sizing: border-box;"></textarea>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
-                    <button class="tab-btn active" style="padding: 8px 20px; cursor: pointer;" onclick="triggerAIAssistantQuery()">زر إرسال</button>
-                </div>
-
-                <div id="aiResponseArea" class="card" style="margin: 0; background: var(--bg-color, #f9f9f9); min-height: 80px; border: 1px dashed var(--border-color, #ccc);">
-                    <p class="card-info" style="margin: 0; text-align: center; color: var(--text-muted);">منطقة عرض الإجابة: ستظهر إجابة المساعد الذكي هنا بناءً على محتوى المادة...</p>
-                </div>
-            </div>
+            </section>
         `;
     }
 
-    /**
-     * إدراج النصوص الجاهزة في صندوق الكتابة عند النقر على الأزرار المقترحة
-     */
-    handlePresetQuery(queryType) {
-        const inputField = document.getElementById('aiQueryInput');
-        if (inputField) {
-            inputField.value = queryType;
-        }
-    }
 
-    /**
-     * معالجة الاستعلام وإرساله مع سياق المادة
-     * @param {string} query 
-     */
     async processQuery(query) {
-        const responseArea = document.getElementById('aiResponseArea');
+
+        const responseArea =
+            document.getElementById("aiResponseArea");
+
         if (!responseArea) return;
 
+
         if (!query || !query.trim()) {
-            responseArea.innerHTML = `<p class="card-info" style="margin: 0; text-align: center; color: var(--secondary-color);">⚠️ الرجاء كتابة سؤال أو اختيار اقتراح أولاً.</p>`;
+
+            responseArea.innerHTML = `
+                <div class="ai-message ai-error-message">
+                    الرجاء كتابة سؤالك أولاً.
+                </div>
+            `;
+
             return;
         }
 
-        responseArea.innerHTML = `<p class="card-info" style="margin: 0; text-align: center; color: var(--primary-color);">⏳ جاري تحليل سياق المادة ومعالجة السؤال...</p>`;
+
+        responseArea.innerHTML = `
+            <div class="ai-loading-state">
+
+                <span class="ai-loading-spinner"></span>
+
+                <div>
+                    <strong>جاري التفكير في إجابتك...</strong>
+                    <p>قد يستغرق الأمر بضع لحظات.</p>
+                </div>
+
+            </div>
+        `;
+
 
         const context = this.getSubjectContext();
 
-        // =========================================================================
-        // [مكان مخصص مستقبلاً للربط مع Supabase Edge Functions أو OpenAI / Gemini API]
-        // مثال للربط الفعلي مع قاعدة بيانات Supabase واسترجاع ملفات PDF والمحتوى:
-        // try {
-        //     const response = await fetch('YOUR_SUPABASE_EDGE_FUNCTION_URL', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Authorization': 'Bearer YOUR_SUPABASE_ANON_KEY'
-        //         },
-        //         body: JSON.stringify({ query: query, subjectContext: context })
-        //     });
-        //     const data = await response.json();
-        //     // عرض النتيجة القادمة من الـ API
-        // } catch (error) {
-        //     // التعامل مع الأخطاء
-        // }
-        // =========================================================================
 
-        // محاكاة إجابة تجريبية (Mock Response) متوافقة مع محتوى المادة
-        setTimeout(() => {
-            let mockAnswer = `تم استلام استفسارك (${query}) لمادة (${context.name}). يعتمد هذا الرد التجريبي على بيانات الفرقة (${context.grade}) والقسم (${context.department}). النظام مستقل وجاهز تماماً للربط مع Supabase أو نماذج الذكاء الاصطناعي لاسترجاع الإجابات من ملفات الـ PDF والمحاضرات.`;
+        try {
 
-            if (query === 'شرح المحاضرة') {
-                mockAnswer = `شرح مبدئي لمحتوى مادة ${context.name}: تتناول المقررات الأساسيات والأساليب الهندسية المعتمدة بإشراف ${context.prof}.`;
-            } else if (query === 'تلخيص المادة') {
-                mockAnswer = `ملخص المادة: تتضمن المادة (${context.lecturesCount}) محاضرة رئيسية و (${context.pdfsCount}) ملفات مرجعية تغطي المنهج الدراسي للترم (${context.term}).`;
-            } else if (query === 'إنشاء أسئلة امتحان') {
-                mockAnswer = `سؤال مقترح للامتحان في ${context.name}: وضح بالتفصيل الأسس النظرية والتطبيقات العملية المرتبطة بموضوعات المنهج.`;
-            } else if (query === 'مراجعة أهم النقاط') {
-                mockAnswer = `نقاط المراجعة الهامة لمادة ${context.name}: التركيز على العلاقات الرياضية، الرسومات التوضيحية، وتطبيقات الهندسة الزراعية ذات الصلة.`;
+            const response = await fetch(
+                SMART_SERVICE_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                    },
+
+                    body: JSON.stringify({
+
+                        query: query.trim(),
+
+                        subjectContext: {
+                            name: context.name,
+                            grade: context.grade,
+                            department: context.department,
+                            term: context.term
+                        }
+
+                    })
+                }
+            );
+
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                data = {};
             }
 
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    `فشل الاتصال بالخدمة. رمز الخطأ: ${response.status}`
+                );
+            }
+
+
+            if (!data.answer) {
+                throw new Error(
+                    "لم يتم استلام إجابة من المساعد الذكي."
+                );
+            }
+
+
             responseArea.innerHTML = `
-                <h3 style="margin-top: 0; font-size: 15px; color: var(--primary-color);">منطقة عرض الإجابة:</h3>
-                <p class="card-info" style="margin: 0; color: var(--text-main, #333); line-height: 1.6;">${mockAnswer}</p>
+                <div class="ai-answer-container">
+
+                    <div class="ai-answer-heading">
+
+                        <div class="ai-answer-icon">✦</div>
+
+                        <div>
+                            <strong>إجابة المساعد الأكاديمي</strong>
+                            <small>بناءً على سؤالك</small>
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="aiAnswerText"
+                        class="ai-answer-text"
+                    ></div>
+
+                </div>
             `;
-        }, 600);
+
+
+            const answerElement =
+                document.getElementById("aiAnswerText");
+
+            if (answerElement) {
+                answerElement.textContent = data.answer;
+            }
+
+
+        } catch (error) {
+
+            console.error("AI Assistant Error:", error);
+
+            responseArea.innerHTML = `
+                <div class="ai-error-container">
+
+                    <strong>تعذر الحصول على الإجابة</strong>
+
+                    <p id="aiErrorText"></p>
+
+                </div>
+            `;
+
+            const errorElement =
+                document.getElementById("aiErrorText");
+
+            if (errorElement) {
+                errorElement.textContent =
+                    error.message || "حدث خطأ غير معروف.";
+            }
+        }
     }
 }
 
-// متغير عام لإدارة حالة المساعد الحالي داخل الصفحة
+
+// Global Functions
+
 let aiAssistantInstance = null;
 
-/**
- * فتح واجهة المساعد الذكي للمادة داخل عنصر aiAssistantArea المحدد
- * @param {Object} subject 
- */
+
 function openAIAssistant(subject) {
-    if (!subject) {
-        console.error("خطأ: بيانات المادة غير متوفرة لفتح المساعد الذكي.");
+
+    aiAssistantInstance =
+        new SubjectAIAssistant(subject);
+
+
+    const aiArea =
+        document.getElementById("aiAssistantArea");
+
+
+    if (!aiArea) {
+
+        console.error(
+            "لم يتم العثور على aiAssistantArea"
+        );
+
         return;
     }
 
-    const metadata = {
-        grade: typeof currentGrade !== 'undefined' ? currentGrade : (subject.grade || 'غير محدد'),
-        department: typeof currentDept !== 'undefined' ? currentDept : (subject.dept || 'غير محدد'),
-        term: typeof currentTerm !== 'undefined' ? currentTerm : (subject.term || 'غير محدد')
-    };
 
-    aiAssistantInstance = new SubjectAIAssistant(subject, metadata);
-    
-    const assistantArea = document.getElementById('aiAssistantArea');
-    if (assistantArea) {
-        assistantArea.innerHTML = aiAssistantInstance.renderAssistantUI();
-        assistantArea.style.display = 'block';
-    } else {
-        console.error("خطأ: عنصر واجهة المساعد (aiAssistantArea) غير موجود في الصفحة.");
-    }
+    aiArea.innerHTML =
+        aiAssistantInstance.renderAssistantUI();
+
+
+    aiArea.style.display = "block";
+
+    aiArea.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 }
 
-/**
- * إغلاق وإخفاء واجهة المساعد الذكي دون إعادة تحميل الصفحة
- */
+
 function closeAIAssistant() {
-    const assistantArea = document.getElementById('aiAssistantArea');
-    if (assistantArea) {
-        assistantArea.innerHTML = '';
-        assistantArea.style.display = 'none';
+
+    const aiArea =
+        document.getElementById("aiAssistantArea");
+
+
+    if (aiArea) {
+
+        aiArea.innerHTML = "";
+
+        aiArea.style.display = "none";
     }
+
+
     aiAssistantInstance = null;
 }
 
-/**
- * معالجة وإرسال السؤال المكتوب عبر واجهة المساعد
- */
-function triggerAIAssistantQuery() {
-    const inputField = document.getElementById('aiQueryInput');
+
+function setAIPrompt(prompt) {
+
+    const inputField =
+        document.getElementById("aiQueryInput");
+
     if (!inputField) return;
 
-    const query = inputField.value.trim();
-    if (!query) return;
+    inputField.value = prompt;
 
-    if (aiAssistantInstance) {
-        aiAssistantInstance.processQuery(query);
-    } else {
-        console.error("خطأ: لم يتم تهيئة كلاس المساعد الذكي بعد.");
+    inputField.focus();
+}
+
+
+function triggerAIAssistantQuery() {
+
+    if (!aiAssistantInstance) {
+
+        console.error("المساعد الذكي غير مهيأ.");
+
+        return;
     }
+
+
+    const inputField =
+        document.getElementById("aiQueryInput");
+
+
+    if (!inputField) {
+
+        console.error(
+            "لم يتم العثور على حقل السؤال."
+        );
+
+        return;
+    }
+
+
+    const query = inputField.value.trim();
+
+
+    aiAssistantInstance.processQuery(query);
 }

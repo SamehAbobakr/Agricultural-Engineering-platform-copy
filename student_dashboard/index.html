@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لوحة متابعة المذاكرة والأهداف لطلاب كلية الهندسة الزراعية">
+    <meta name="theme-color" content="#10b981">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚜%3C/text%3E%3C/svg%3E">
+    <title>منصة الهندسة الزراعية | لوحة إنجاز الطالب</title>
+    
+    <!-- خط Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.469.0"></script>
+    <!-- Tailwind: أدوات التخطيط فقط (flex/grid/المسافات). الألوان والوضع الداكن من CSS المنصة -->
+    <link rel="stylesheet" href="css/tailwind.css">
+
+    <!-- CSS المنصة الرئيسي (المجلد المشترك ../css) — نفس ترتيب التحميل: المتغيرات أولًا والـ responsive أخيرًا -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/search.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <!-- تنسيقات مكونات لوحة الإنجاز فقط (تعتمد على متغيرات المنصة) -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- إعدادات Supabase ثم الهيدر الموحد -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/clarity.js"></script>
+</head>
+<body class="dashboard-page">
+    <!-- الوضع النهاري/الليلي: يُطبَّق مبكرًا من js/header.js (المصدر الوحيد للثيم) -->
+     
+    
+
+<!-- الهيدر الموحد للمنصة -->
+<!-- =========================
+     الهيدر الرئيسي
+========================== -->
+<header class="main-header">
+    <div class="header-container">
+
+        <!-- شعار واسم المنصة -->
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+
+        <!-- روابط التنقل (الكمبيوتر) -->
+        <nav class="main-nav" aria-label="التنقل الرئيسي">
+    <a href="../index.html" class="nav-link" data-nav="home">الرئيسية</a>
+    <a href="../student_dashboard/index.html" class="nav-link active" aria-current="page" data-nav="dashboard">لوحة إنجاز الطالب</a>
+    <a href="../about/about.html" class="nav-link" data-nav="about">عن الكلية</a>
+    <a href="../faculty/faculty.html" class="nav-link" data-nav="faculty">دليل هيئة التدريس</a>
+    <a href="../community/community.html" class="nav-link" data-nav="community">مجتمع الطلاب والخريجين</a>
+    <a href="../tools/tools.html" class="nav-link" data-nav="tools">الأدوات</a>
+        </nav>
+
+        <div class="nav-desktop-actions" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <a href="../login.html" class="nav-action-link login-link" data-nav="login">تسجيل الدخول</a>
+            <a href="https://wa.me/201551743249" class="nav-action-link" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+        </div>
+
+        <!-- الوضع الليلي -->
+        <button type="button" class="theme-toggle" id="theme-toggle"
+            aria-label="تغيير الوضع" title="الوضع النهاري أو الليلي"
+            onclick="toggleTheme()">🌙</button>
+
+        <!-- زر الهمبرجر (الموبايل فقط) -->
+        <button type="button" class="hamburger-btn" id="hamburgerBtn"
+            aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobileNavDrawer">
+            <span class="hamburger-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
+        </button>
+
+    </div>
+</header>
+
+<!-- ستارة القائمة الجانبية -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+<!-- درج القائمة الجانبية (الموبايل) -->
+<nav class="mobile-nav-drawer" id="mobileNavDrawer"
+    aria-label="قائمة التنقل" aria-hidden="false">
+
+    <div class="drawer-header">
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn"
+            aria-label="إغلاق القائمة">×</button>
+    </div>
+
+    <div class="drawer-nav">
+            <a href="../index.html" class="drawer-nav-link" data-nav="home"><span class="link-icon">🏠</span>الرئيسية</a>
+            <a href="../student_dashboard/index.html" class="drawer-nav-link active" data-nav="dashboard"><span class="link-icon">📊</span>لوحة إنجاز الطالب</a>
+            <a href="../about/about.html" class="drawer-nav-link" data-nav="about"><span class="link-icon">🎓</span>عن الكلية</a>
+            <a href="../faculty/faculty.html" class="drawer-nav-link" data-nav="faculty"><span class="link-icon">👨‍🏫</span>دليل هيئة التدريس</a>
+            <a href="../community/community.html" class="drawer-nav-link" data-nav="community"><span class="link-icon">🤝</span>مجتمع الطلاب والخريجين</a>
+            <a href="../tools/tools.html" class="drawer-nav-link" data-nav="tools"><span class="link-icon">🛠️</span>الأدوات</a>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-action-group">
+        <a href="../login.html" class="drawer-action-btn primary">
+            <span>🔑</span> تسجيل الدخول
+        </a>
+        <a href="https://wa.me/201551743249" class="drawer-action-btn" target="_blank" rel="noopener noreferrer"><span>💬</span> تواصل معنا</a>
+    </div>
+
+</nav>
+
+
+    <!-- Main Container -->
+
+<main class="content-area dash-locked" id="dash-main">
+        <!-- بوابة الحساب: تظهر بدل اللوحة عند التحقق من الجلسة، أو عدم تسجيل الدخول، أو تحميل/فشل تحميل بيانات الطالب.
+             النصوص والأزرار يملؤها js/app.js (renderGate). -->
+        <section id="dash-gate" class="dash-panel dash-gate" role="status" aria-live="polite">
+            <div id="dash-gate-icon" class="dash-gate-icon" aria-hidden="true">⏳</div>
+            <h2 id="dash-gate-title" class="dash-gate-title">جاري التحقق من حسابك...</h2>
+            <p id="dash-gate-text" class="dash-gate-text dash-muted"></p>
+            <div id="dash-gate-actions" class="dash-gate-actions"></div>
+        </section>
+
+        <!-- Section 1: Welcome & Student Profile Header -->
+        <section class="dash-hero">
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <div class="dash-pill">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                        <span id="student-academic-badge">جاري جلب البيانات...</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                        مرحباً بك، <span id="student-name-display" class="dash-accent">...</span> 
+                    </h1>
+                    <p id="student-quote-display" class="dash-hero-quote text-sm max-w-2xl italic">
+                        "استعن بالله ولا تعجز.. كل خطوة  تقربك من هدفك."
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0">
+                    <button id="add-goal-btn" type="button" class="dash-btn dash-btn--primary flex-1 md:flex-initial">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        إضافة هدف جديد
+                    </button>
+                    <button id="edit-profile-btn" type="button" class="dash-btn dash-btn--icon" title="تعديل بيانات الحساب">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Background Decorative Pattern -->
+            <div class="dash-hero-glow"></div>
+        </section>
+
+        <!-- Section 2: الإحصائيات — .stats-grid و .stat-card من CSS المنصة -->
+        <section class="stats-grid">
+            <div class="stat-card dash-stat">
+                <div class="dash-stat-icon dash-stat-icon--1"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                <div class="dash-stat-body">
+                    <p>إجمالي المقررات</p>
+                    <h3 id="stat-total-courses">--</h3>
+                    <p class="dash-stat-sub">للتيرم الحالي</p>
+                </div>
+            </div>
+
+            <div class="stat-card dash-stat">
+                <div class="dash-stat-icon dash-stat-icon--2"><i data-lucide="check-circle-2" class="w-6 h-6"></i></div>
+                <div class="dash-stat-body">
+                    <p>الأهداف المكتملة</p>
+                    <h3 id="stat-completed-goals">--</h3>
+                    <p id="stat-goals-ratio" class="dash-stat-sub">-- % إنجاز</p>
+                </div>
+            </div>
+
+            <div class="stat-card dash-stat">
+                <div class="dash-stat-icon dash-stat-icon--3"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+                <div class="dash-stat-body">
+                    <p>تقدّم المراجعة</p>
+                    <h3 id="stat-total-files">--</h3>
+                    <p id="stat-files-sub" class="dash-stat-sub">--</p>
+                </div>
+            </div>
+
+            <div class="stat-card dash-stat">
+                <div class="dash-stat-icon dash-stat-icon--4"><i data-lucide="award" class="w-6 h-6"></i></div>
+                <div class="dash-stat-body">
+                    <p>المعدل / التقدير</p>
+                    <h3 id="stat-gpa-display">غير محدد</h3>
+                    <p id="stat-academic-year-label" class="dash-stat-sub">السنة الدراسية</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Split Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Left Col (2 Columns Wide on Desktop): Academic Courses & Materials -->
+            <section class="lg:col-span-2 space-y-6">
+                
+                <!-- Courses Section Header with Year/Term Selector -->
+                <div class="dash-panel space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b">
+                        <div>
+                            <h2 class="section-title dash-title">
+                                <i data-lucide="library" class="dash-title-icon"></i>
+                                المقررات الدراسية والمحتوى
+                            </h2>
+                            <p class="text-xs dash-muted mt-0.5">استعرض المواد المقررة والوصول المباشر لملفاتها التعليمية</p>
+                        </div>
+
+                     
+                    <div class="flex items-center gap-2 flex-wrap">
+                            <select id="main-year-select" aria-label="الفرقة" class="inner-search dash-field dash-select">
+                                <option value="1">الفرقة الأولى</option><option value="2">الفرقة الثانية</option>
+                                <option value="3">الفرقة الثالثة</option><option value="4">الفرقة الرابعة</option>
+                            </select>
+                            <select id="main-term-select" aria-label="الترم" class="inner-search dash-field dash-select">
+                                <option value="1">الترم الأول</option><option value="2">الترم الثاني</option>
+                            </select>
+                            <select id="main-department-select" aria-label="القسم" class="inner-search dash-field dash-select"><option value="">كل الأقسام</option></select>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Controls inside Courses -->
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex-grow">
+                            <i data-lucide="search" class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 dash-muted pointer-events-none"></i>
+                            <input type="text" id="course-search-input" placeholder="ابحث باسم المادة..." class="inner-search dash-field dash-search-input">
+                        </div>
+                    </div>
+
+                    <!-- Courses Grid Container -->
+                    <div id="courses-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <!-- Loading State -->
+                        <div class="loading-screen col-span-full">
+                            <div class="loading-spinner" aria-hidden="true">⏳</div>
+                            <p>جاري تحميل المواد الدراسية...</p>
+                        </div>
+                    </div>
+
+                    <!-- Empty Courses State -->
+                    <div id="courses-empty-state" class="hidden dash-empty space-y-3">
+                        <i data-lucide="folder-open" class="w-10 h-10 mx-auto dash-muted"></i>
+                        <p class="text-sm dash-strong">لا توجد مواد مسجلة لهذا الترم حالياً</p>
+                        <p class="text-xs dash-muted">تأكد من اختيار الفرقة والترم الصحيحين من أعلى الشاشة.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Right Col (1 Column Wide on Desktop): Goals & Quick Notes -->
+            <section class="space-y-6">
+                
+                <!-- Goals & Tasks Card -->
+                <div class="dash-panel space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b">
+                        <h2 class="section-title dash-title">
+                            <i data-lucide="target" class="dash-title-icon"></i>
+                            أهدافي 
+                        </h2>
+                        <span id="goals-count-badge" class="dash-pill dash-pill--sm">
+                            0/0
+                        </span>
+                    </div>
+
+                    <!-- Goals List -->
+                    <div id="goals-list-container" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                        <!-- Loading State -->
+                        <p class="text-xs dash-muted text-center py-4">جاري تحميل الأهداف...</p>
+                    </div>
+
+                    <!-- Empty Goals State -->
+                    <div id="goals-empty-state" class="hidden text-center py-6 space-y-2">
+                        <i data-lucide="check-square" class="w-8 h-8 mx-auto dash-muted"></i>
+                        <p class="text-xs font-semibold dash-muted">لا توجد أهداف محددة بعد</p>
+                        <button id="add-first-goal-btn" class="text-xs dash-accent font-bold hover:underline">
+                            + اضف هدفك الأول الآن
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Personal Notes Card -->
+                <div class="dash-panel space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm flex items-center gap-2 dash-strong">
+                            <i data-lucide="sticky-note" class="w-4 h-4 dash-note-icon"></i>
+                            ملاحظات ومذكرات حرة
+                        </h3>
+                        <span id="notes-save-status" class="text-[10px] dash-muted">محفوظ تلقائياً</span>
+                    </div>
+                    <textarea id="student-quick-notes" rows="4" placeholder="اكتب ملاحظاتك السريعة، مواعيد الامتحانات، أو التنبيهات المهمة هنا..." class="inner-search dash-field"></textarea>
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+
+<!-- Footer -->
+<footer class="main-footer">
+    <p>
+        © <span id="current-year">2026</span> Sameh Abobakr — منصة كلية الهندسة الزراعية
+    </p>
+</footer>
+
+    <div id="toast-container" role="status" aria-live="polite" class="toast hidden">
+        <span id="toast-icon-wrap" class="shrink-0 mt-0.5"></span>
+        <div class="flex-grow"><h4 id="toast-title" class="toast-title"></h4><p id="toast-message" class="toast-message"></p></div>
+        <button id="toast-close-btn" type="button" aria-label="إغلاق" class="dash-icon-btn"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+
+    <!-- MODALS SECTION -->
+
+    <!-- 1. Profile & Settings Modal -->
+    <div id="profile-modal" class="fixed inset-0 hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="dash-modal w-full max-w-md p-6 space-y-5">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="dash-modal-title flex items-center gap-2">
+                    <i data-lucide="user-cog" class="dash-title-icon"></i>
+                    تخصيص البيانات الشخصية
+                </h3>
+                <button id="close-profile-modal-btn" type="button" class="dash-icon-btn">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="profile-form" class="space-y-4">
+                <div>
+                    <label for="input-student-name" class="dash-label">اسم الطالب الكامل</label>
+                    <input type="text" id="input-student-name" required placeholder="أدخل اسمك كما تحب أن يظهر" class="inner-search dash-field">
+                </div>
+
+
+                <div>
+                    <label for="input-student-gpa" class="dash-label">التقدير / التراكمي (اختياري)</label>
+                    <input type="text" id="input-student-gpa" placeholder="مثال: امتياز أو 3.65" class="inner-search dash-field">
+                </div>
+
+                <div>
+                    <label for="input-student-quote" class="dash-label">عبارة تحفيزية شخصية</label>
+                    <input type="text" id="input-student-quote" placeholder="اكتب شعارك الشخصي..." class="inner-search dash-field">
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t">
+                    <button id="cancel-profile-btn" type="button" class="dash-btn dash-btn--ghost">إلغاء</button>
+                    <button type="submit" class="dash-btn dash-btn--primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Add Goal Modal -->
+    <div id="goal-modal" class="fixed inset-0 hidden flex items-center justify-center p-4 modal-backdrop">
+        <div class="dash-modal w-full max-w-md p-6 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="dash-modal-title flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="dash-title-icon"></i>
+                    إضافة هدف أكاديمي جديد
+                </h3>
+                <button id="close-goal-modal-btn" type="button" class="dash-icon-btn">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="goal-form" class="space-y-4">
+                <div>
+                    <label for="input-goal-title" class="dash-label">عنوان الهدف</label>
+                    <input type="text" id="input-goal-title" required placeholder="مثال: إنهاء تلخيص شيت هندسة القوى" class="inner-search dash-field">
+                </div>
+
+                <div>
+                    <label for="input-goal-category" class="dash-label">التصنيف</label>
+                    <select id="input-goal-category" class="inner-search dash-field">
+                        <option value="مذاكرة">مذاكرة ومراجعة</option>
+                        <option value="مشاريع">مشروع / شيتات</option>
+                        <option value="امتحانات">استعداد للامتحانات</option>
+                        <option value="عام">هدف عام</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t">
+                    <button id="cancel-goal-btn" type="button" class="dash-btn dash-btn--ghost">إلغاء</button>
+                    <button type="submit" class="dash-btn dash-btn--primary">إضافة الهدف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 3. Edit Course Modal -->
+    <div id="course-modal" class="fixed inset-0 hidden flex items-center justify-center p-4 modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="course-modal-name">
+        <div class="dash-modal w-full max-w-md p-6 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3 gap-3">
+                <h3 id="course-modal-name" class="dash-modal-title"></h3>
+                <button id="close-course-modal-btn" type="button" aria-label="إغلاق" class="dash-icon-btn"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="course-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label for="input-course-total" class="dash-label">إجمالي المحاضرات</label><input type="number" min="0" max="999" id="input-course-total" required class="inner-search dash-field"></div>
+                    <div><label for="input-course-reviewed" class="dash-label">تمت مراجعتها</label><input type="number" min="0" max="999" id="input-course-reviewed" class="inner-search dash-field"></div>
+                </div>
+                <div><label for="input-course-link" class="dash-label">رابط ملفات المادة (اختياري)</label><input type="url" id="input-course-link" dir="ltr" placeholder="https://..." class="inner-search dash-field"></div>
+                <div class="flex items-center justify-end gap-2 pt-3 border-t">
+                    <button id="cancel-course-btn" type="button" class="dash-btn dash-btn--ghost">إلغاء</button>
+                    <button type="submit" class="dash-btn dash-btn--primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script type="module" src="js/app.js"></script>
+    
+    <script>
+        // Automatic Year Updater
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

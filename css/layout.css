@@ -1,0 +1,60 @@
+/* =========================================
+   الهيدر
+========================================= */
+
+/* قواعد .main-header و .header-container انتقلت إلى navigation.css (مصدر واحد للهيدر) */
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+}
+
+.logo-area h1 {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 800;
+    margin: 0;
+}
+
+
+/* =========================================
+   التخطيط الرئيسي
+========================================= */
+
+.app-layout {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 65px);
+    position: relative;
+}
+
+.content-area {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    background: var(--bg-color);
+}
+
+
+/* الفوتر (.main-footer) انتقل إلى components.css ليصل لكل الصفحات، ومنها "عن الكلية" التي لا تحمّل هذا الملف */
+
+
+/* =========================================
+   منع خروج العناصر من المساحة
+========================================= */
+
+.content-area,
+.card,
+.material-view {
+    max-width: 100%;
+    min-width: 0;
+}

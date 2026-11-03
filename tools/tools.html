@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>أدوات المنصة | الهندسة الزراعية</title>
+    <meta name="description" content="أدوات مساعدة للمذاكرة والتنظيم لطلاب كلية الهندسة الزراعية.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚜%3C/text%3E%3C/svg%3E">
+
+    <!-- خط المنصة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <style>
+        .tools-page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .tools-intro {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .tools-intro p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 14px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .tool-icon {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+        }
+
+        .tool-card h2 {
+            font-size: 1.15rem;
+            margin: 0;
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            line-height: 1.9;
+            margin: 0;
+            flex: 1;
+        }
+
+        .tool-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .tool-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 9px;
+            background: var(--primary-color);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+
+        .tool-button:hover {
+            opacity: 0.85;
+        }
+
+        .tool-button.secondary {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .tools-back {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .tools-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .tool-card {
+                padding: 18px;
+            }
+
+            .tool-actions {
+                flex-direction: column;
+            }
+
+            .tool-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+
+    <!-- Microsoft Clarity -->
+<script src="../js/auth.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/clarity.js"></script>
+</head>
+
+
+<body>
+
+<!-- =========================
+     الهيدر الرئيسي
+========================== -->
+<header class="main-header">
+    <div class="header-container">
+
+        <!-- شعار واسم المنصة -->
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+
+        <!-- روابط التنقل (الكمبيوتر) -->
+        <nav class="main-nav" aria-label="التنقل الرئيسي">
+    <a href="../index.html" class="nav-link" data-nav="home">الرئيسية</a>
+    <a href="../student_dashboard/index.html" class="nav-link" data-nav="dashboard">لوحة إنجاز الطالب</a>
+    <a href="../about/about.html" class="nav-link" data-nav="about">عن الكلية</a>
+    <a href="../faculty/faculty.html" class="nav-link" data-nav="faculty">دليل هيئة التدريس</a>
+    <a href="../community/community.html" class="nav-link" data-nav="community">مجتمع الطلاب والخريجين</a>
+    <a href="../tools/tools.html" class="nav-link active" aria-current="page" data-nav="tools">الأدوات</a>
+        </nav>
+
+        <div class="nav-desktop-actions" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <a href="../login.html" class="nav-action-link login-link" data-nav="login">تسجيل الدخول</a>
+            <a href="https://wa.me/201551743249" class="nav-action-link" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+        </div>
+
+        <!-- الوضع الليلي -->
+        <button type="button" class="theme-toggle" id="themeToggle"
+            aria-label="تغيير الوضع" title="الوضع النهاري أو الليلي"
+            onclick="toggleTheme()">🌙</button>
+
+        <!-- زر الهمبرجر (الموبايل فقط) -->
+        <button type="button" class="hamburger-btn" id="hamburgerBtn"
+            aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobileNavDrawer">
+            <span class="hamburger-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
+        </button>
+
+    </div>
+</header>
+
+<!-- ستارة القائمة الجانبية -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+<!-- درج القائمة الجانبية (الموبايل) -->
+<nav class="mobile-nav-drawer" id="mobileNavDrawer"
+    aria-label="قائمة التنقل" aria-hidden="false">
+
+    <div class="drawer-header">
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn"
+            aria-label="إغلاق القائمة">×</button>
+    </div>
+
+    <div class="drawer-nav">
+            <a href="../index.html" class="drawer-nav-link" data-nav="home"><span class="link-icon">🏠</span>الرئيسية</a>
+            <a href="../student_dashboard/index.html" class="drawer-nav-link" data-nav="dashboard"><span class="link-icon">📊</span>لوحة إنجاز الطالب</a>
+            <a href="../about/about.html" class="drawer-nav-link" data-nav="about"><span class="link-icon">🎓</span>عن الكلية</a>
+            <a href="../faculty/faculty.html" class="drawer-nav-link" data-nav="faculty"><span class="link-icon">👨‍🏫</span>دليل هيئة التدريس</a>
+            <a href="../community/community.html" class="drawer-nav-link" data-nav="community"><span class="link-icon">🤝</span>مجتمع الطلاب والخريجين</a>
+            <a href="../tools/tools.html" class="drawer-nav-link active" data-nav="tools"><span class="link-icon">🛠️</span>الأدوات</a>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-action-group">
+        <a href="../login.html" class="drawer-action-btn primary">
+            <span>🔑</span> تسجيل الدخول
+        </a>
+        <a href="https://wa.me/201551743249" class="drawer-action-btn" target="_blank" rel="noopener noreferrer"><span>💬</span> تواصل معنا</a>
+    </div>
+
+</nav>
+
+
+
+    <main class="tools-page">
+        <a href="../index.html" class="tools-back">← العودة إلى الرئيسية</a>
+
+        <section class="tools-intro">
+            <h1 class="section-title">أدوات المنصة</h1>
+            <p>مجموعة أدوات تساعدك على تنظيم المذاكرة والتعلم.</p>
+        </section>
+
+        <section class="tools-grid" aria-label="الأدوات التعليمية">
+
+            <article class="tool-card">
+                <img class="tool-icon"
+                     src="../assets/images/icons/obsidian-.png"
+                     alt="Obsidian" width="58" height="58">
+                <h2>Obsidian</h2>
+                <p>
+                    أداة لتنظيم الملاحظات وربط الأفكار والمعلومات،
+                    وبناء قاعدة معرفة خاصة بك للمذاكرة.
+                </p>
+                <div class="tool-actions">
+                    <a class="tool-button secondary"
+                       href="https://www.youtube.com/watch?v=NHVXgWJiIcs"
+                       target="_blank" rel="noopener noreferrer">
+                        مشاهدة الشرح
+                    </a>
+                    <a class="tool-button"
+                       href="https://obsidian.md/"
+                       target="_blank" rel="noopener noreferrer">
+                        الموقع الرسمي
+                    </a>
+                </div>
+            </article>
+
+            <article class="tool-card">
+                <img class="tool-icon"
+                     src="../assets/images/icons/alarm-clock.png"
+                     alt="مؤقت المذاكرة" width="58" height="58">
+                <h2>مؤقت المذاكرة</h2>
+                <p>
+                    نظّم وقت المذاكرة والتركيز من خلال مؤقت
+                    بسيط وسهل الاستخدام.
+                </p>
+                <div class="tool-actions">
+                    <a class="tool-button" href="study-timer.html">
+                        فتح المؤقت
+                    </a>
+                </div>
+            </article>
+
+            <article class="tool-card">
+                <img class="tool-icon"
+                     src="../assets/images/icons/NotebookLM.jfif"
+                     alt="NotebookLM" width="58" height="58">
+                <h2>NotebookLM</h2>
+                <p>
+                    مساعد ذكي لفهم المصادر والملفات الدراسية
+                    وتلخيصها والإجابة عن الأسئلة اعتمادًا عليها.
+                </p>
+                <div class="tool-actions">
+                    <a class="tool-button secondary"
+                       href="https://www.youtube.com/watch?v=YTfhgzDZZ0w"
+                       target="_blank" rel="noopener noreferrer">
+                        مشاهدة الشرح
+                    </a>
+                    <a class="tool-button"
+                       href="https://notebooklm.google.com/"
+                       target="_blank" rel="noopener noreferrer">
+                        الموقع الرسمي
+                    </a>
+                </div>
+            </article>
+
+            <article class="tool-card">
+                <div class="tool-icon" aria-hidden="true"
+                     style="font-size: 48px; display: grid; place-items: center;">
+                    🖊️
+                </div>
+                <h2>سبورة الشرح</h2>
+                <p>سبورة تفاعلية للشرح والمذاكرة والمحاضرات.</p>
+                <div class="tool-actions">
+                    <a class="tool-button"
+                       href="https://spahboard.ninjascribe.workers.dev/"
+                       target="_blank" rel="noopener noreferrer">
+                        فتح السبورة
+                    </a>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>© 2026 Sameh Abobakr — منصة كلية الهندسة الزراعية</p>
+    </footer>
+    <!-- عميل Supabase الوحيد للصفحة (يُنشأ في auth.js) لمزامنة زر الدخول/الخروج -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/ui.js"></script>
+</body>
+</html>

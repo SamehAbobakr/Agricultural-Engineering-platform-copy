@@ -1,1333 +1,21 @@
-// الكود الكامل المحدث والجاهز للاستبدال المباشر
-async function loadSubjectsFromSupabase() {
-    try {
-        console.log("========== LOAD SUBJECTS ==========");
-        console.log("🎓 Grade:", currentGrade);
-        console.log("📖 Term:", currentTerm);
-
-        const { data, error } = await supabaseClient
-            .from('subjects')
-            .select('*')
-            .ilike('grade', `%${currentGrade.trim()}%`)
-            .ilike('term', `%${currentTerm.trim()}%`);
-
-        if (error) throw error;
-
-        console.log("📘 المواد المسترجعة من Supabase:", data);
-
-        return data || [];
-
-    } catch (error) {
-        console.error("❌ خطأ في جلب المواد من Supabase:", error);
-        return [];
-    }
-}
-function renderHome() {
-    currentGrade = '';
-    currentDept = '';
-    currentTerm = '';
-
-    updateSidebarActive();
-
-    const html = `
-        <div class="fade-in">
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>44</h3>
-                    <p>📚 إجمالي المواد المتاحة</p>
-                </div>
-
-                <div class="stat-card">
-                    <h3>480</h3>
-                    <p>🎥 إجمالي المحاضرات</p>
-                </div>
-
-                <div class="stat-card">
-                    <h3>720</h3>
-                    <p>📄 ملفات PDF</p>
-                </div>
-
-                <div class="stat-card">
-                    <h3>35</h3>
-                    <p>👨‍🏫 أعضاء هيئة التدريس</p>
-                </div>
-            </div>
 
 
-            <h2 class="section-title">اختر الفرقة الدراسية</h2>
+function toggleScrollBtn() {
+    const btn = document.getElementById('scrollTopBtn');
 
-            <!-- كروت الفرق -->
-            <div class="grid-container">
-
-                <!-- الفرقة الأولى -->
-                <div class="card"
-                    onclick="selectGrade('الفرقة الأولى')"
-                    style="border-top: 4px solid var(--grade-1)">
-
-                    <div class="card-header-icon">📘</div>
-
-                    <h3>الفرقة الأولى</h3>
-
-                    <p class="card-info">
-                        المقررات الأساسية العامة وتأسيس العلوم الهندسية.
-                    </p>
-
-                    <div class="card-footer">
-                        <span>الدخول للفرقة</span>
-                        <span>←</span>
-                    </div>
-
-                </div>
-
-
-                <!-- الفرقة الثانية -->
-                <div class="card"
-                    onclick="selectGrade('الفرقة الثانية')"
-                    style="border-top: 4px solid var(--grade-2)">
-
-                    <div class="card-header-icon">📗</div>
-
-                    <h3>الفرقة الثانية</h3>
-
-                    <p class="card-info">
-                        المقررات الهندسية التأسيسية والرياضيات المتقدمة.
-                    </p>
-
-                    <div class="card-footer">
-                        <span>الدخول للفرقة</span>
-                        <span>←</span>
-                    </div>
-
-                </div>
-
-
-                <!-- الفرقة الثالثة -->
-                <div class="card"
-                    onclick="selectGrade('الفرقة الثالثة')"
-                    style="border-top: 4px solid var(--grade-3)">
-
-                    <div class="card-header-icon">📙</div>
-
-                    <h3>الفرقة الثالثة</h3>
-
-                    <p class="card-info">
-                        بداية التخصص والتفرع للأقسام العلمية الستة.
-                        <br>
-                        <strong style="color:var(--primary-color)">
-                            متاح: هندسة القوى والآلات (الترم الأول)
-                        </strong>
-                    </p>
-
-                    <div class="card-footer">
-                        <span>الدخول للفرقة</span>
-                        <span>←</span>
-                    </div>
-
-                </div>
-
-
-                <!-- الفرقة الرابعة -->
-                <div class="card"
-                    onclick="selectGrade('الفرقة الرابعة')"
-                    style="border-top: 4px solid var(--grade-4)">
-
-                    <div class="card-header-icon">📕</div>
-
-                    <h3>الفرقة الرابعة</h3>
-
-                    <p class="card-info">
-                        التخصص الدقيق ومشاريع التخرج والتطبيقات الهندسية.
-                    </p>
-
-                    <div class="card-footer">
-                        <span>الدخول للفرقة</span>
-                        <span>←</span>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- أدوات المنصة -->
-            <h2 class="section-title" style="margin-top: 35px;">
-                أدوات المنصة
-            </h2>
-
-            <!-- سبورة الشرح -->
-            <div class="card"
-                onclick="openWhiteboard()"
-                style="
-                    border-top: 4px solid var(--primary-color);
-                    cursor: pointer;
-                    width: 100%;
-                ">
-
-                <div class="card-header-icon">🖊️</div>
-
-                <h3>سبورة الشرح</h3>
-
-                <p class="card-info">
-                    سبورة تفاعلية للشرح والمذاكرة والمحاضرات.
-                </p>
-
-                <div class="card-footer">
-                    <span>فتح السبورة</span>
-                    <span>←</span>
-                </div>
-
-            </div>
-
-        </div>
-    `;
-
-    document.getElementById('contentArea').innerHTML = html;
-}
-function openWhiteboard() {
-    const whiteboardUrl = 'https://spahboard.ninjascribe.workers.dev/';
-
-    // فتح السبورة في صفحة مستقلة على جميع الأجهزة
-    window.open(whiteboardUrl, '_blank', 'noopener,noreferrer');
-}
-function renderDepartments() {
-    let html = `
-        <div class="fade-in">
-            <div class="breadcrumb">
-                <span onclick="resetView()">🏠 الرئيسية</span> > 
-                <span>🎓 ${currentGrade}</span>
-            </div>
-            <h2 class="section-title">اختر القسم العلمي (${currentGrade})</h2>
-            <div class="grid-container">
-    `;
-    departmentsList.forEach(dept => {
-        html += `
-            <div class="card" onclick="selectDepartment('${dept.name}')">
-                <div class="card-header-icon">${dept.icon}</div>
-                <h3>${dept.name}</h3>
-                <p class="card-info">${dept.desc}</p>
-                <div class="card-footer"><span>استعراض المواد</span><span>←</span></div>
-            </div>
-        `;
-    });
-    html += `</div></div>`;
-    document.getElementById('contentArea').innerHTML = html;
-}
-
-function renderTerms() {
-    let html = `
-        <div class="fade-in">
-            <div class="breadcrumb">
-                <span onclick="resetView()">🏠 الرئيسية</span> > 
-                <span onclick="selectGrade('${currentGrade}')">🎓 ${currentGrade}</span>
-                ${currentDept ? ` > <span onclick="renderDepartments()">🏢 ${currentDept}</span>` : ''}
-            </div>
-            <h2 class="section-title">اختر الفصل الدراسي</h2>
-            <div class="grid-container">
-                <div class="card" onclick="selectTerm('الترم الأول')">
-                    <div class="card-header-icon">📖</div>
-                    <h3>الترم الأول</h3>
-                    <p class="card-info">مقررات ومحاضرات الفصل الدراسي الأول</p>
-                    <div class="card-footer"><span>عرض المواد</span><span>←</span></div>
-                </div>
-                <div class="card" onclick="selectTerm('الترم الثاني')">
-                    <div class="card-header-icon">📘</div>
-                    <h3>الترم الثاني</h3>
-                    <p class="card-info">مقررات ومحاضرات الفصل الدراسي الثاني</p>
-                    <div class="card-footer"><span>عرض المواد</span><span>←</span></div>
-                </div>
-            </div>
-        </div>
-    `;
-    document.getElementById('contentArea').innerHTML = html;
-}
-
-async function renderSubjects() {
-    document.getElementById('contentArea').innerHTML = `
-        <div class="loading-screen">
-            <div class="loading-spinner">⚙️</div>
-            <p>جاري تحميل المواد من Supabase...</p>
-        </div>
-    `;
-
-    const subjectsToDisplay = await loadSubjectsFromSupabase();
-
-    let html = `
-        <div class="fade-in">
-            <div class="breadcrumb">
-                <span onclick="resetView()">🏠 الرئيسية</span> > 
-                <span onclick="selectGrade('${currentGrade}')">🎓 ${currentGrade}</span>
-                ${currentDept ? ` <span onclick="renderDepartments()">🏢 ${currentDept}</span>` : ''}
-                > <span>📘 ${currentTerm}</span>
-            </div>
-            <h2 class="section-title">المواد الدراسية (<span style="color:var(--primary-color)">${subjectsToDisplay.length} مواد</span>)</h2>
-            <input type="text" class="inner-search" placeholder="🔍 ابحث عن مادة..." oninput="filterSubjects(this.value)">
-            <div class="grid-container" id="subjectsGridContainer">
-    `;
-
-    if (!subjectsToDisplay || subjectsToDisplay.length === 0) {
-        html += `<p style="text-align: center; color: var(--text-muted); padding: 30px; grid-column: 1 / -1;">لا توجد مواد متاحة حالياً.</p>`;
+    if (window.scrollY > 200) {
+        btn.style.display = 'flex';
     } else {
-        subjectsToDisplay.forEach(sub => {
-            const subJson = JSON.stringify(sub).replace(/"/g, '&quot;');
-            const profName = sub.professor || sub.prof || 'غير متوفر';
-            const updatedText = sub.updated || 'حديث';
-            html += `
-                <div class="card" onclick="openMaterialView(${subJson})">
-                    <div class="card-header-icon">${sub.icon || '📘'}</div>
-                    <h3>${sub.name}</h3>
-                    <p class="card-info">👨‍🏫 ${profName}</p>
-                    <div class="card-footer">
-                        <span style="color:var(--primary-color)">🟢 ${updatedText}</span>
-                        <span style="font-weight:bold; color:var(--secondary-color)">[دخول المادة]</span>
-                    </div>
-                </div>
-            `;
-        });
+        btn.style.display = 'none';
     }
-    html += `</div></div>`;
-    document.getElementById('contentArea').innerHTML = html;
 }
 
-function openMaterialView(subject) {
-    if (!subject || !subject.id) {
-        console.error("❌ بيانات المادة غير صالحة أو مفقود معرف المادة (id):", subject);
-        alert("حدث خطأ: بيانات المادة غير صالحة.");
-        return;
-    }
-    showLoading(() => {
-        renderMaterialPage(subject);
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
     });
 }
-
-async function renderMaterialPage(subject) {
-    const deptName = currentDept ? currentDept : (subject.department || subject.dept || currentGrade);
-    const lastUpdated = subject.updated || 'غير متوفرة';
-    const subJson = JSON.stringify(subject).replace(/"/g, '&quot;');
-
-    // شاشة تحميل مؤقتة
-    document.getElementById('contentArea').innerHTML = `
-        <div class="loading-screen">
-            <div class="loading-spinner">⚙️</div>
-            <p>جاري تحميل محتوى المادة...</p>
-        </div>
-    `;
-
-    try {
-        // جلب ملفات المادة لمعرفة الأقسام الموجودة فعليًا
-        const { data: files, error } = await supabaseClient
-            .from('material_files')
-            .select('category, file_order')
-            .eq('subject_id', subject.id)
-            .order('file_order', { ascending: true });
-
-        if (error) throw error;
-
-        // ترتيب الأقسام الأساسي
-        const categoryOrder = [
-            'المحاضرات',
-            'الكتاب الاكترونى',
-            'السكاشن',
-            'الملخصات',
-            'حل الشيت',
-            'الفيديوهات',
-            'الامتحانات',
-            'أخرى'
-        ];
-
-        // معرفة الأقسام الموجودة فعليًا في قاعدة البيانات
-        const existingCategories = [];
-
-        (files || []).forEach(file => {
-            if (!file.category) return;
-
-            const normalized = normalizeCategory(file.category);
-
-            // منع تكرار نفس القسم
-            if (!existingCategories.some(
-                cat => normalizeCategory(cat) === normalized
-            )) {
-                existingCategories.push(file.category);
-            }
-        });
-
-        // ترتيب الأقسام حسب الترتيب المحدد، مع إبقاء أي قسم جديد في النهاية
-        const orderedCategories = [];
-
-        categoryOrder.forEach(category => {
-            const found = existingCategories.find(
-                existing => normalizeCategory(existing) === normalizeCategory(category)
-            );
-
-            if (found) {
-                orderedCategories.push(found);
-            }
-        });
-
-        // أي تصنيف جديد غير موجود في القائمة الأساسية يظهر تلقائيًا
-        existingCategories.forEach(category => {
-            if (!orderedCategories.some(
-                existing => normalizeCategory(existing) === normalizeCategory(category)
-            )) {
-                orderedCategories.push(category);
-            }
-        });
-
-        let html = `
-            <div class="fade-in material-view" style="direction: rtl; text-align: right;">
-                <div class="breadcrumb">
-                    <span onclick="resetView()">🏠 الرئيسية</span> > 
-                    <span onclick="renderSubjects()">رجوع للمواد</span>
-                </div>
-
-                <h2 class="section-title" style="margin-top:10px;">
-                    مادة: ${subject.name}
-                </h2>
-
-                <p style="color:var(--text-muted); margin-bottom:5px;">
-                    <strong>القسم التابع لها:</strong> ${deptName} |
-                    <strong>الفرقة:</strong> ${currentGrade || subject.grade || 'غير محدد'}
-                </p>
-
-                <p style="color:var(--text-muted); margin-bottom:15px;">
-                    <strong>آخر تحديث:</strong> ${lastUpdated}
-                </p>
-
-                <div class="card"
-                    style="margin-bottom: 20px; border-right: 4px solid var(--primary-color); cursor: pointer;"
-                    onclick="openAIAssistant(${subJson})">
-
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <h3 style="margin-bottom: 5px;">
-                                المساعد الذكي للمادة 🤖
-                            </h3>
-
-                            <p class="card-info" style="margin: 0;">
-                                انقر هنا لاستخدام المساعد الذكي في شرح وتلخيص محتوى المادة.
-                            </p>
-                        </div>
-
-                        <span style="font-size: 24px; color: var(--primary-color);">
-                            💬
-                        </span>
-                    </div>
-                </div>
-
-                <div id="aiAssistantArea"></div>
-
-                <div class="material-tabs" id="materialTabsContainer">
-        `;
-
-        // إنشاء التابات من قاعدة البيانات
-        if (orderedCategories.length > 0) {
-
-            orderedCategories.forEach((category, index) => {
-
-                const activeClass = index === 0 ? ' active' : '';
-                const defaultId = index === 0 ? ' id="defaultTabBtn"' : '';
-
-                html += `
-                    <button
-                        class="tab-btn${activeClass}"
-                        ${defaultId}
-                        onclick="switchMaterialTab(this, '${category.replace(/'/g, "\\'")}', ${subJson})">
-                        ${category}
-                    </button>
-                `;
-            });
-
-        } else {
-
-            html += `
-                <span style="color:var(--text-muted); padding:10px;">
-                    لا توجد أقسام متاحة حاليًا.
-                </span>
-            `;
-        }
-
-        html += `
-                </div>
-
-                <div id="tabContentArea" style="margin-top:20px;"></div>
-            </div>
-        `;
-
-        document.getElementById('contentArea').innerHTML = html;
-
-        // فتح أول قسم موجود تلقائيًا
-        const firstTabBtn = document.getElementById('defaultTabBtn');
-
-        if (firstTabBtn && orderedCategories.length > 0) {
-            switchMaterialTab(
-                firstTabBtn,
-                orderedCategories[0],
-                subject
-            );
-        }
-
-    } catch (error) {
-
-        console.error("❌ خطأ في تحميل أقسام المادة:", error);
-
-        document.getElementById('contentArea').innerHTML = `
-            <div class="fade-in">
-                <p style="text-align:center; color:var(--text-muted); padding:30px;">
-                    حدث خطأ أثناء تحميل محتوى المادة.
-                </p>
-            </div>
-        `;
-    }
-}
-async function switchMaterialTab(btnElement, type, subject) {
-
-    // =========================================
-    // تفعيل التبويب الحالي
-    // =========================================
-
-    const buttons = document.querySelectorAll('#materialTabsContainer .tab-btn');
-
-    buttons.forEach(btn => btn.classList.remove('active'));
-
-    if (btnElement) {
-        btnElement.classList.add('active');
-    }
-
-    // =========================================
-    // منطقة المحتوى
-    // =========================================
-
-    const contentArea = document.getElementById('tabContentArea');
-
-    if (!contentArea) return;
-
-    contentArea.innerHTML = `
-        <div class="loading-screen">
-            <div class="loading-spinner">⚙️</div>
-            <p>جاري جلب الملفات...</p>
-        </div>
-    `;
-
-    // =========================================
-    // التأكد من وجود المادة
-    // =========================================
-
-    if (!subject || !subject.id) {
-
-        contentArea.innerHTML = `
-            <p style="
-                text-align: center;
-                color: var(--text-muted);
-                padding: 30px;
-            ">
-                معرف المادة غير متوفر.
-            </p>
-        `;
-
-        return;
-    }
-
-    try {
-
-        console.log("📘 المادة الحالية:", subject);
-        console.log("🏷️ التصنيف المطلوب:", type);
-
-        // =========================================
-        // جلب الملفات من Supabase
-        // =========================================
-
-        const { data: files, error } = await supabaseClient
-            .from('material_files')
-            .select('*')
-            .eq('subject_id', subject.id)
-            .order('file_order', { ascending: true });
-
-        if (error) throw error;
-
-        console.log("📂 ملفات المادة المسترجعة:", files);
-
-        // =========================================
-        // فلترة الملفات
-        // =========================================
-
-        const normalizedTargetType = normalizeCategory(type);
-
-        const filteredFiles = (files || []).filter(
-            file =>
-                normalizeCategory(file.category) === normalizedTargetType
-        );
-
-        console.log("📚 الملفات بعد الفلترة:", filteredFiles);
-
-        // =========================================
-        // لا توجد ملفات
-        // =========================================
-
-        if (!filteredFiles || filteredFiles.length === 0) {
-
-            contentArea.innerHTML = `
-                <p style="
-                    text-align: center;
-                    color: var(--text-muted);
-                    padding: 30px;
-                ">
-                    لا توجد ملفات متاحة في هذا القسم حالياً.
-                </p>
-            `;
-
-            return;
-        }
-
-        // =========================================
-        // HTML + CSS
-        // =========================================
-
-        let html = `
-
-        <style>
-
-            /* =========================================
-               شبكة الملفات
-            ========================================= */
-
-            .material-files-grid {
-
-                display: grid;
-
-                grid-template-columns:
-                    repeat(auto-fill, minmax(250px, 1fr));
-
-                gap: 18px;
-
-                width: 100%;
-            }
-
-
-            /* =========================================
-               الكارت
-            ========================================= */
-
-            .material-file-card {
-
-                background:
-                    linear-gradient(
-                        145deg,
-                        rgba(30, 41, 59, 0.98),
-                        rgba(25, 36, 53, 0.98)
-                    );
-
-                border: 1px solid var(--border-color);
-
-                border-radius: 16px;
-
-                padding: 18px;
-
-                display: flex;
-
-                flex-direction: column;
-
-                min-width: 0;
-
-                overflow: hidden;
-
-                transition:
-                    transform 0.2s ease,
-                    border-color 0.2s ease,
-                    box-shadow 0.2s ease;
-            }
-
-
-            /* =========================================
-               تفاعل الكمبيوتر فقط
-            ========================================= */
-
-            @media (hover: hover) {
-
-                .material-file-card:hover {
-
-                    transform: translateY(-4px);
-
-                    border-color:
-                        rgba(16, 185, 129, 0.55);
-
-                    box-shadow:
-                        0 10px 25px
-                        rgba(0, 0, 0, 0.28);
-                }
-            }
-
-
-            /* =========================================
-               الجزء العلوي
-            ========================================= */
-
-            .material-file-top {
-
-                display: flex;
-
-                align-items: flex-start;
-
-                gap: 12px;
-
-                margin-bottom: 14px;
-            }
-
-
-            /* =========================================
-               أيقونة الملف
-            ========================================= */
-
-            .material-file-icon {
-
-                width: 48px;
-
-                height: 48px;
-
-                min-width: 48px;
-
-                display: flex;
-
-                align-items: center;
-
-                justify-content: center;
-
-                border-radius: 12px;
-
-                background:
-                    rgba(239, 68, 68, 0.12);
-
-                border:
-                    1px solid rgba(239, 68, 68, 0.18);
-
-                font-size: 24px;
-            }
-
-
-            /* =========================================
-               عنوان الملف
-            ========================================= */
-
-            .material-file-title {
-
-                color: var(--text-main);
-
-                font-size: 1rem;
-
-                font-weight: 700;
-
-                line-height: 1.6;
-
-                margin: 0;
-
-                word-break: break-word;
-            }
-
-
-            /* =========================================
-               وصف الملف
-            ========================================= */
-
-            .material-file-description {
-
-                color: var(--text-muted);
-
-                font-size: 0.82rem;
-
-                line-height: 1.7;
-
-                margin: 0 0 16px;
-
-                min-height: 45px;
-
-                display: -webkit-box;
-
-                -webkit-line-clamp: 3;
-
-                -webkit-box-orient: vertical;
-
-                overflow: hidden;
-
-                word-break: break-word;
-            }
-
-
-            /* =========================================
-               معلومات بسيطة
-            ========================================= */
-
-            .material-file-info {
-
-                display: flex;
-
-                align-items: center;
-
-                gap: 7px;
-
-                margin-bottom: 14px;
-
-                padding-bottom: 12px;
-
-                border-bottom:
-                    1px solid var(--border-color);
-
-                color: var(--text-muted);
-
-                font-size: 0.72rem;
-            }
-
-
-            .material-file-info span {
-
-                background:
-                    rgba(255, 255, 255, 0.04);
-
-                border:
-                    1px solid var(--border-color);
-
-                border-radius: 6px;
-
-                padding: 4px 7px;
-            }
-
-
-            /* =========================================
-               منطقة الأزرار
-            ========================================= */
-
-            .material-file-actions {
-
-                display: flex;
-
-                flex-direction: column;
-
-                gap: 8px;
-
-                width: 100%;
-
-                margin-top: auto;
-            }
-
-
-            /* =========================================
-               زر فتح الملف
-            ========================================= */
-
-            .material-open-btn {
-
-                width: 100%;
-
-                min-height: 44px;
-
-                display: flex;
-
-                align-items: center;
-
-                justify-content: center;
-
-                gap: 8px;
-
-                background: var(--primary-color);
-
-                color: #06130e;
-
-                border:
-                    1px solid var(--primary-color);
-
-                border-radius: 9px;
-
-                text-decoration: none;
-
-                font-family: inherit;
-
-                font-size: 0.86rem;
-
-                font-weight: 800;
-
-                cursor: pointer;
-
-                touch-action: manipulation;
-
-                -webkit-tap-highlight-color: transparent;
-
-                transition:
-                    transform 0.2s ease,
-                    box-shadow 0.2s ease;
-            }
-
-
-            .material-open-btn:hover {
-
-                transform: translateY(-2px);
-
-                box-shadow:
-                    0 6px 16px
-                    rgba(16, 185, 129, 0.22);
-            }
-
-
-            .material-open-btn:active {
-
-                transform: scale(0.98);
-            }
-
-
-            /* =========================================
-               زر التحميل
-            ========================================= */
-
-            .material-download-btn {
-
-                width: 100%;
-
-                min-height: 40px;
-
-                display: flex;
-
-                align-items: center;
-
-                justify-content: center;
-
-                gap: 7px;
-
-                background:
-                    rgba(255, 255, 255, 0.025);
-
-                color: var(--secondary-color);
-
-                border:
-                    1px solid rgba(59, 130, 246, 0.38);
-
-                border-radius: 9px;
-
-                font-family: inherit;
-
-                font-size: 0.8rem;
-
-                font-weight: 700;
-
-                cursor: pointer;
-
-                touch-action: manipulation;
-
-                -webkit-tap-highlight-color: transparent;
-
-                transition:
-                    transform 0.2s ease,
-                    background-color 0.2s ease,
-                    border-color 0.2s ease;
-            }
-
-
-            .material-download-btn:hover {
-
-                transform: translateY(-1px);
-
-                background:
-                    rgba(59, 130, 246, 0.1);
-
-                border-color:
-                    var(--secondary-color);
-            }
-
-
-            .material-download-btn:active {
-
-                transform: scale(0.98);
-            }
-
-
-            /* =========================================
-               ضمان التفاعل
-            ========================================= */
-
-            .material-file-card a,
-            .material-file-card button {
-
-                position: relative;
-
-                z-index: 5;
-
-                pointer-events: auto;
-
-                -webkit-user-select: none;
-
-                user-select: none;
-            }
-
-
-            /* =========================================
-               الموبايل
-            ========================================= */
-
-            @media (max-width: 600px) {
-
-                .material-files-grid {
-
-                    grid-template-columns:
-                        repeat(2, minmax(0, 1fr));
-
-                    gap: 9px;
-                }
-
-
-                .material-file-card {
-
-                    padding: 11px;
-
-                    border-radius: 12px;
-                }
-
-
-                .material-file-top {
-
-                    gap: 7px;
-
-                    margin-bottom: 9px;
-                }
-
-
-                .material-file-icon {
-
-                    width: 35px;
-
-                    height: 35px;
-
-                    min-width: 35px;
-
-                    border-radius: 8px;
-
-                    font-size: 18px;
-                }
-
-
-                .material-file-title {
-
-                    font-size: 0.76rem;
-
-                    line-height: 1.45;
-                }
-
-
-                .material-file-description {
-
-                    font-size: 0.63rem;
-
-                    line-height: 1.5;
-
-                    min-height: 34px;
-
-                    margin-bottom: 9px;
-
-                    -webkit-line-clamp: 2;
-                }
-
-
-                .material-file-info {
-
-                    gap: 4px;
-
-                    margin-bottom: 9px;
-
-                    padding-bottom: 8px;
-
-                    font-size: 0.55rem;
-                }
-
-
-                .material-file-info span {
-
-                    padding: 3px 5px;
-                }
-
-
-                .material-file-actions {
-
-                    gap: 5px;
-                }
-
-
-                .material-open-btn {
-
-                    min-height: 37px;
-
-                    border-radius: 7px;
-
-                    font-size: 0.69rem;
-
-                    gap: 5px;
-                }
-
-
-                .material-download-btn {
-
-                    min-height: 34px;
-
-                    border-radius: 7px;
-
-                    font-size: 0.64rem;
-
-                    gap: 4px;
-                }
-            }
-
-
-            /* =========================================
-               الموبايل الصغير جداً
-            ========================================= */
-
-            @media (max-width: 380px) {
-
-                .material-files-grid {
-
-                    gap: 7px;
-                }
-
-
-                .material-file-card {
-
-                    padding: 9px;
-                }
-
-
-                .material-file-icon {
-
-                    width: 31px;
-
-                    height: 31px;
-
-                    min-width: 31px;
-
-                    font-size: 16px;
-                }
-
-
-                .material-file-title {
-
-                    font-size: 0.7rem;
-                }
-
-
-                .material-file-description {
-
-                    font-size: 0.58rem;
-                }
-
-
-                .material-open-btn {
-
-                    min-height: 35px;
-
-                    font-size: 0.64rem;
-                }
-
-
-                .material-download-btn {
-
-                    min-height: 32px;
-
-                    font-size: 0.59rem;
-                }
-            }
-
-        </style>
-
-
-        <div class="material-files-grid">
-        `;
-
-        window.currentViewerSubject = subject;
-        // =========================================
-        // إنشاء كروت الملفات
-        // =========================================
-
-        filteredFiles.forEach(file => {
-
-            const targetUrl =
-                file.file_url || '#';
-
-            const fileTitle =
-                file.title || 'بدون عنوان';
-
-            const fileDesc =
-                file.description || 'ملف تعليمي';
-
-            const fileType =
-                file.file_type || 'PDF';
-
-
-            html += `
-
-                <div class="material-file-card">
-
-                    <!-- رأس الملف -->
-
-                    <div class="material-file-top">
-
-                        <div class="material-file-icon">
-                            📕
-                        </div>
-
-                        <h3 class="material-file-title">
-                            ${fileTitle}
-                        </h3>
-
-                    </div>
-
-
-                    <!-- الوصف -->
-
-                    <p class="material-file-description">
-                        ${fileDesc}
-                    </p>
-
-
-                    <!-- معلومات الملف -->
-
-                    <div class="material-file-info">
-
-                        <span>
-                            📄 ${fileType.toUpperCase()}
-                        </span>
-
-                        <span>
-                            ملف دراسي
-                        </span>
-
-                    </div>
-
-<!-- الأزرار -->
-
-<div class="material-file-actions">
-
-    <!-- فتح -->
-
-    <a
-        href="${targetUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="material-open-btn"
-    >
-        <span>👁️</span>
-        <span>فتح الملف</span>
-    </a>
-
-
-    <!-- تحميل -->
-
-    <button
-        type="button"
-        class="material-download-btn"
-        onclick="downloadMaterialFile(
-            '${targetUrl}',
-            '${fileTitle.replace(/'/g, "\\'")}'
-        )"
-    >
-        <span>⬇️</span>
-        <span>تحميل الملف</span>
-    </button>
-
-</div>
-
-
-                </div>
-
-            `;
-
-        });
-
-
-        // =========================================
-        // إنهاء الشبكة
-        // =========================================
-
-        html += `
-            </div>
-        `;
-
-
-        contentArea.innerHTML = html;
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ خطأ في جلب ملفات المادة من Supabase:",
-            error
-        );
-
-        contentArea.innerHTML = `
-            <p style="
-                text-align: center;
-                color: var(--text-muted);
-                padding: 30px;
-            ">
-                حدث خطأ أثناء تحميل الملفات.
-            </p>
-        `;
-    }
-}
-
-async function downloadMaterialFile(url, fileName) {
-    if (!url || url === '#') {
-        alert("رابط التحميل غير متوفر.");
-        return;
-    }
-
-    try {
-        const response = await fetch(url, {
-            mode: 'cors'
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const blob = await response.blob();
-
-        // إنشاء رابط مؤقت للملف
-        const blobUrl = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = blobUrl;
-
-        // اسم الملف عند التحميل
-        a.download = fileName.toLowerCase().endsWith('.pdf')
-            ? fileName
-            : `${fileName}.pdf`;
-
-        document.body.appendChild(a);
-        a.click();
-
-        // تنظيف
-        setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(blobUrl);
-        }, 1000);
-
-    } catch (error) {
-        console.error("❌ فشل تحميل الملف:", error);
-
-        // لو CORS منع التحميل المباشر
-        alert("تعذر التحميل المباشر. سيتم فتح الملف، ويمكنك تحميله من عارض PDF.");
-
-        window.open(url, '_blank');
-    }
-}
-function normalizeCategory(cat) {
-    if (!cat) return '';
-    return normalizeText(cat).replace(/\s+/g, '');
-}
-
-function normalizeText(text) {
-    if (!text) return '';
-    return text.toLowerCase()
-        .replace(/[أإآا]/g, 'ا')
-        .replace(/ة/g, 'ه')
-        .replace(/ى/g, 'ي')
-        .trim();
-}
-
 function showLoading(callback) {
     document.getElementById('contentArea').innerHTML = `
         <div class="loading-screen">
@@ -1335,24 +23,1750 @@ function showLoading(callback) {
             <p>جاري تحميل المحتوى...</p>
         </div>
     `;
+
     setTimeout(callback, 250);
 }
+// =========================================
+// حماية أي نص قادم من قاعدة البيانات قبل
+// إدراجه داخل HTML (منع XSS)
+// =========================================
 
-function filterSubjects(query) {
-    const cards = document.querySelectorAll('#subjectsGridContainer .card');
-    cards.forEach(card => {
-        const titleElement = card.querySelector('h3');
-        if (titleElement) {
-            const title = titleElement.textContent.toLowerCase();
-            if (title.includes(query.toLowerCase())) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
+function escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+
+    // يهرّب النص للاستخدام داخل HTML وداخل قيم الـ attributes معًا
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// =========================================
+// تمرير القيم إلى أزرار onclick بأمان
+// بدل كتابة بيانات قاعدة البيانات داخل HTML،
+// نحفظ القيمة في مصفوفة ونمرر رقمها فقط (رقم لا يمكن حقنه).
+// =========================================
+
+const inlineArgStore = [];
+
+function inlineArg(value) {
+    inlineArgStore.push(value);
+    return `getInlineArg(${inlineArgStore.length - 1})`;
+}
+
+function getInlineArg(index) {
+    return inlineArgStore[index];
+}
+
+// =========================================
+// روابط آمنة: تقبل http و https فقط
+// (تمنع javascript: و data: وغيرها)
+// =========================================
+
+function safeUrl(url) {
+    if (typeof url !== 'string') return '';
+
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+
+    try {
+        const parsed = new URL(trimmed, window.location.href);
+        return (parsed.protocol === 'http:' || parsed.protocol === 'https:')
+            ? trimmed
+            : '';
+    } catch (error) {
+        return '';
+    }
+}
+
+function openExternal(url) {
+    const clean = safeUrl(url);
+    if (!clean) return;
+
+    window.open(clean, '_blank', 'noopener,noreferrer');
+}
+
+function normalizeCategory(cat) {
+    if (!cat) return '';
+
+    return normalizeText(cat).replace(/\s+/g, '');
+}
+
+function normalizeText(text) {
+    if (!text) return '';
+
+    return text.toLowerCase()
+        .replace(/[أإآا]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .trim();
+}
+function renderGrades() {
+
+    const html = `
+        <div class="fade-in">
+
+            <h2 class="section-title">
+                اختر الفرقة الدراسية
+            </h2>
+
+            <div class="grid-container">
+
+                <div class="card"
+                    onclick="selectGrade('الفرقة الأولى')"
+                    style="border-top: 4px solid var(--grade-1)">
+
+                    <img
+                        src="assets/images/icons/Grade1.jfif"
+                        alt="الفرقة الأولى"
+                        style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: contain;
+                        ">
+
+                    <h3>الفرقة الأولى</h3>
+
+                    <p class="card-info">
+                        المقررات الدراسية الخاصة بالفرقة الأولى.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>الدخول للفرقة</span>
+                        <span>←</span>
+                    </div>
+
+                </div>
+
+
+                <div class="card"
+                    onclick="selectGrade('الفرقة الثانية')"
+                    style="border-top: 4px solid var(--grade-2)">
+
+                    <img
+                        src="assets/images/icons/Grade2.jfif"
+                        alt="الفرقة الثانية"
+                        style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: contain;
+                        ">
+
+                    <h3>الفرقة الثانية</h3>
+
+                    <p class="card-info">
+                        المقررات الدراسية الخاصة بالفرقة الثانية.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>الدخول للفرقة</span>
+                        <span>←</span>
+                    </div>
+
+                </div>
+
+
+                <div class="card"
+                    onclick="selectGrade('الفرقة الثالثة')"
+                    style="border-top: 4px solid var(--grade-3)">
+
+                    <img
+                        src="assets/images/icons/Grade3.jfif"
+                        alt="الفرقة الثالثة"
+                        style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: contain;
+                        ">
+
+                    <h3>الفرقة الثالثة</h3>
+
+                    <p class="card-info">
+                        المقررات الدراسية الخاصة بالفرقة الثالثة.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>الدخول للفرقة</span>
+                        <span>←</span>
+                    </div>
+
+                </div>
+
+
+                <div class="card"
+                    onclick="selectGrade('الفرقة الرابعة')"
+                    style="border-top: 4px solid var(--grade-4)">
+
+                    <img
+                        src="assets/images/icons/Grade4.jfif"
+                        alt="الفرقة الرابعة"
+                        style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: contain;
+                        ">
+
+                    <h3>الفرقة الرابعة</h3>
+
+                    <p class="card-info">
+                        المقررات الدراسية الخاصة بالفرقة الرابعة.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>الدخول للفرقة</span>
+                        <span>←</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+    document.getElementById('contentArea').innerHTML = html;
+}
+async function renderMore() {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="loading-screen">
+            <div class="loading-spinner">⚙️</div>
+            <p>جاري تحميل المزيد...</p>
+        </div>
+    `;
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('more_items')
+            .select('*')
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        let html = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+                    <span onclick="resetView()">
+                        🏠 الرئيسية
+                    </span>
+                    >
+                    <span>
+                        ➕ المزيد
+                    </span>
+                </div>
+
+                <h2 class="section-title">
+                    ➕ المزيد
+                </h2>
+
+                <div class="grid-container">
+        `;
+
+        if (!data || data.length === 0) {
+
+            html += `
+                <p style="
+                    text-align:center;
+                    color:var(--text-muted);
+                    padding:30px;
+                    grid-column:1 / -1;
+                ">
+                    لا يوجد محتوى متاح حالياً.
+                </p>
+            `;
+
+        } else {
+
+            data.forEach(item => {
+
+                html += `
+                    <div
+                        class="card"
+                        onclick="showLoading(() => openMoreItem(${inlineArg(item.id)}))"                    >
+
+                        <div class="card-header-icon">
+                            ${escapeHtml(item.icon || '📌')}
+                        </div>
+
+                        <h3>
+                            ${escapeHtml(item.title)}
+                        </h3>
+
+                        ${
+                            item.description
+                            ? `
+                                <p class="card-info">
+                                    ${escapeHtml(item.description)}
+                                </p>
+                            `
+                            : ''
+                        }
+
+                        <div class="card-footer">
+
+                            <span style="
+                                color:var(--primary-color)
+                            ">
+                                ${escapeHtml(item.category || 'قسم')}
+                            </span>
+
+                            <span style="
+                                font-weight:bold;
+                                color:var(--secondary-color)
+                            ">
+                                [دخول]
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        contentArea.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في تحميل أقسام المزيد:',
+            error
+        );
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل أقسام المزيد.
+                </p>
+
+            </div>
+        `;
+    }
+}
+async function renderTopYears() {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="loading-screen">
+            <div class="loading-spinner">⚙️</div>
+            <p>جاري تحميل سنوات الأوائل...</p>
+        </div>
+    `;
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('top_years')
+            .select('*')
+            .order('year', { ascending: false });
+
+        if (error) throw error;
+
+        let html = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+                    <span onclick="resetView()">🏠 الرئيسية</span>
+                    >
+                    <span onclick="selectProgram('المزيد')">
+                        ➕ المزيد
+                    </span>
+                    >
+                    <span>🏆 الأوائل</span>
+                </div>
+
+                <h2 class="section-title">
+                    🏆 الأوائل
+                </h2>
+
+                <div class="grid-container">
+        `;
+
+        if (!data || data.length === 0) {
+
+            html += `
+                <p style="
+                    text-align:center;
+                    color:var(--text-muted);
+                    padding:30px;
+                    grid-column:1 / -1;
+                ">
+                    لا توجد سنوات متاحة حالياً.
+                </p>
+            `;
+
+        } else {
+
+            data.forEach(item => {
+
+                const itemJson =
+                    inlineArg(item);
+
+                html += `
+                    <div
+                        class="card"
+                        onclick="openTopYear(${itemJson})"
+                    >
+
+                        <div class="card-header-icon">
+                            🏆
+                        </div>
+
+                        <h3>
+                            ${escapeHtml(item.title)}
+                        </h3>
+
+                        <p class="card-info">
+                            أوائل العام ${escapeHtml(item.year)}
+                        </p>
+
+                        <div class="card-footer">
+
+                            <span style="color:var(--primary-color)">
+                                📄 PDF
+                            </span>
+
+                            <span style="
+                                font-weight:bold;
+                                color:var(--secondary-color)
+                            ">
+                                [فتح]
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        contentArea.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في تحميل سنوات الأوائل:',
+            error
+        );
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل سنوات الأوائل.
+                </p>
+            </div>
+        `;
+    }
+}
+async function openTopYear(item) {
+
+    if (!item || !item.pdf_url) {
+        alert("رابط ملف الـ PDF غير متوفر.");
+        return;
+    }
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="fade-in material-view" style="direction: rtl; text-align: right;">
+
+            <div class="breadcrumb">
+                <span onclick="resetView()">🏠 الرئيسية</span>
+                >
+                <span onclick="selectProgram('المزيد')">
+                    ➕ المزيد
+                </span>
+                >
+                <span onclick="renderTopYears()">
+                    🏆 الأوائل
+                </span>
+                >
+                <span>${escapeHtml(item.title)}</span>
+            </div>
+
+            <h2 class="section-title" style="margin-top:10px;">
+                🏆 ${escapeHtml(item.title)}
+            </h2>
+
+            <p style="
+                color:var(--text-muted);
+                margin-bottom:25px;
+                text-align:center;
+            ">
+                أوائل العام ${escapeHtml(item.year)}
+            </p>
+
+            <div class="material-file-card">
+
+                <div class="material-file-top">
+
+                    <div class="material-file-icon">
+                        📕
+                    </div>
+
+                    <h3 class="material-file-title">
+                        ${escapeHtml(item.title)}
+                    </h3>
+
+                </div>
+
+                <p class="material-file-description">
+                    ملف أوائل العام ${escapeHtml(item.year)}
+                </p>
+
+                <div class="material-file-info">
+
+                    <span>
+                        📄 PDF
+                    </span>
+
+                    <span>
+                        أوائل الطلاب
+                    </span>
+
+                </div>
+
+                <div class="material-file-actions">
+
+                    <!-- فتح الملف -->
+                    <a
+                        href="${escapeHtml(safeUrl(item.pdf_url) || '#')}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="material-open-btn"
+                    >
+                        <span>👁️</span>
+                        <span>فتح الملف</span>
+                    </a>
+
+                    <!-- تحميل الملف -->
+                    <button
+                        type="button"
+                        class="material-download-btn"
+                        onclick="downloadMaterialFile(
+                            ${inlineArg(item.pdf_url)},
+                            ${inlineArg(item.title)}
+                        )"
+                    >
+                        <span>⬇️</span>
+                        <span>تحميل الملف</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function renderExamSchedulesFromMore() {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="fade-in">
+
+            <div class="breadcrumb">
+
+                <span onclick="resetView()">
+                    🏠 الرئيسية
+                </span>
+
+                >
+
+                <span onclick="renderMore()">
+                    ➕ المزيد
+                </span>
+
+                >
+
+                <span>
+                    🏫 شؤون الطلاب
+                </span>
+
+                >
+
+                <span>
+                    📅 جداول الامتحانات
+                </span>
+
+            </div>
+
+            <h2 class="section-title">
+                📅 جداول الامتحانات
+            </h2>
+
+            <div class="grid-container">
+
+                ${
+                    currentExamSchedules.length > 0
+
+                    ? currentExamSchedules.map(item => `
+
+                        <div
+                            class="card"
+                            onclick="openMorePdf(
+                                ${inlineArg(item)},
+                                'جداول الامتحانات',
+                                '📅'
+                            )"
+                        >
+
+                            <div class="card-header-icon">
+                                📅
+                            </div>
+
+                            <h3>
+                                ${escapeHtml(item.title)}
+                            </h3>
+
+                            <p class="card-info">
+                                ${
+                                    item.year
+                                        ? `العام ${escapeHtml(item.year)}`
+                                        : ''
+                                }
+                            </p>
+
+                            <div class="card-footer">
+
+                                <span style="
+                                    color:var(--primary-color)
+                                ">
+                                    📄 PDF
+                                </span>
+
+                                <span style="
+                                    font-weight:bold;
+                                    color:var(--secondary-color)
+                                ">
+                                    [فتح]
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    `).join('')
+
+                    : `
+                        <p style="
+                            text-align:center;
+                            color:var(--text-muted);
+                            padding:30px;
+                            grid-column:1 / -1;
+                        ">
+                            لا توجد جداول امتحانات حالياً.
+                        </p>
+                    `
+                }
+
+            </div>
+
+        </div>
+    `;
+}
+
+async function openMoreItem(id) {
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('more_items')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) throw error;
+
+        if (!data) {
+            console.error('❌ لم يتم العثور على القسم');
+            return;
+        }
+
+        // =========================================
+        // حفظ القسم في سجل التنقل
+        // =========================================
+
+        navigationHistory.push({
+            program: 'المزيد',
+            grade: '',
+            dept: '',
+            term: '',
+            subject: null,
+            moreItemId: data.id,
+            moreItemTitle: data.title
+        });
+
+        navigationIndex = navigationHistory.length - 1;
+
+        
+
+
+        // =========================================
+        // شؤون الطلاب
+        // =========================================
+
+        if (data.title === 'شؤون الطلاب') {
+
+            const [
+                { data: topYears, error: topYearsError },
+                { data: examSchedules, error: examSchedulesError }
+            ] = await Promise.all([
+
+                supabaseClient
+                    .from('top_years')
+                    .select('*')
+                    .eq('more_item_id', data.id)
+                    .order('year', { ascending: false }),
+
+                supabaseClient
+                    .from('exam_schedules')
+                    .select('*')
+                    .eq('more_item_id', data.id)
+                    .order('year', { ascending: false })
+
+            ]);
+
+            if (topYearsError) throw topYearsError;
+            if (examSchedulesError) throw examSchedulesError;
+
+            currentTopYears = topYears || [];
+            currentExamSchedules = examSchedules || [];
+
+            renderStudentAffairs(
+                data,
+                currentTopYears,
+                currentExamSchedules
+            );
+
+            return
+
+        }
+        // =========================================
+        // المصادر الخارجية
+        // =========================================
+
+            if (data.title === 'مصادر خارجية') {
+                await renderAdditionalResources();
+                return;
             }
+
+
+        // =========================================
+        // باقي الأقسام
+        // العلم الشرعي + البرمجة
+        // =========================================
+
+        const {
+            data: contents,
+            error: contentsError
+        } = await supabaseClient
+            .from('more_contents')
+            .select('*')
+            .eq('more_item_id', data.id)
+            .order('created_at', { ascending: true });
+
+        if (contentsError) throw contentsError;
+
+        renderMoreContents(data, contents || []);
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في فتح قسم المزيد:',
+            error
+        );
+
+        document.getElementById('contentArea').innerHTML = `
+            <div class="fade-in">
+
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل القسم.
+                </p>
+
+            </div>
+        `;
+    }
+}
+
+function renderStudentAffairs(parentItem, topYears, examSchedules) {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="fade-in">
+
+            <div class="breadcrumb">
+                <span onclick="resetView()">
+                    🏠 الرئيسية
+                </span>
+
+                >
+
+                <span onclick="renderMore()">
+                    ➕ المزيد
+                </span>
+
+                >
+
+                <span>
+                    🏫 شؤون الطلاب
+                </span>
+            </div>
+
+            <h2 class="section-title">
+                🏫 ${escapeHtml(parentItem.title)}
+            </h2>
+
+            <div class="grid-container">
+
+                <!-- الأوائل -->
+                <div
+                    class="card"
+                    onclick="showLoading(() => renderTopYears())"                >
+
+                    <div class="card-header-icon">
+                        🏆
+                    </div>
+
+                    <h3>
+                        الأوائل
+                    </h3>
+
+                    <p class="card-info">
+                        قوائم أوائل الطلاب
+                    </p>
+
+                    <div class="card-footer">
+
+                        <span style="color:var(--primary-color)">
+                            ${topYears.length} ملف
+                        </span>
+
+                        <span style="
+                            font-weight:bold;
+                            color:var(--secondary-color);
+                        ">
+                            [دخول]
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- جداول الامتحانات -->
+                <div
+                    class="card"
+                    onclick="renderExamSchedulesFromMore()"
+                >
+
+                    <div class="card-header-icon">
+                        📅
+                    </div>
+
+                    <h3>
+                        جداول الامتحانات
+                    </h3>
+
+                    <p class="card-info">
+                        جداول الامتحانات للطلاب
+                    </p>
+
+                    <div class="card-footer">
+
+                        <span style="color:var(--primary-color)">
+                            ${examSchedules.length} ملف
+                        </span>
+
+                        <span style="
+                            font-weight:bold;
+                            color:var(--secondary-color);
+                        ">
+                            [دخول]
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function renderMoreContents(parentItem, contents) {
+
+    const contentArea = document.getElementById('contentArea');
+
+    let html = `
+        <div class="fade-in">
+
+            <div class="breadcrumb">
+
+                <span onclick="resetView()">
+                    🏠 الرئيسية
+                </span>
+
+                >
+
+                <span onclick="renderMore()">
+                    ➕ المزيد
+                </span>
+
+                >
+
+                <span>
+                    ${escapeHtml(parentItem.icon || '📚')}
+                    ${escapeHtml(parentItem.title)}
+                </span>
+
+            </div>
+
+            <h2 class="section-title">
+                ${escapeHtml(parentItem.icon || '📚')}
+                ${escapeHtml(parentItem.title)}
+            </h2>
+
+            <div class="grid-container">
+    `;
+
+    if (!contents || contents.length === 0) {
+
+        html += `
+            <p style="
+                text-align:center;
+                color:var(--text-muted);
+                padding:30px;
+                grid-column:1 / -1;
+            ">
+                لا يوجد محتوى متاح حالياً.
+            </p>
+        `;
+
+    } else {
+
+        contents.forEach(item => {
+
+            html += `
+                <div
+                    class="card"
+                    onclick="openMoreContent(${inlineArg(item.id)})"
+                >
+
+                    <div class="card-header-icon">
+                        ${escapeHtml(item.icon || parentItem.icon || '📌')}
+                    </div>
+
+                    <h3>
+                        ${escapeHtml(item.title)}
+                    </h3>
+
+                    ${
+                        item.description
+                        ? `
+                            <p class="card-info">
+                                ${escapeHtml(item.description)}
+                            </p>
+                        `
+                        : ''
+                    }
+
+                    <div class="card-footer">
+
+                        <span style="
+                            color:var(--primary-color)
+                        ">
+                            ${
+                                item.link
+                                ? '🔗 رابط'
+                                : '📚 محتوى'
+                            }
+                        </span>
+
+                        <span style="
+                            font-weight:bold;
+                            color:var(--secondary-color)
+                        ">
+                            [دخول]
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+    }
+
+    html += `
+            </div>
+        </div>
+    `;
+
+    contentArea.innerHTML = html;
+}
+async function openMoreContent(id) {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="loading-screen">
+            <div class="loading-spinner">⚙️</div>
+            <p>جاري تحميل المحتوى...</p>
+        </div>
+    `;
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('more_contents')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) throw error;
+
+        if (!data) {
+            console.error('❌ لم يتم العثور على المحتوى');
+            return;
+        }
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+
+                    <span onclick="resetView()">
+                        🏠 الرئيسية
+                    </span>
+
+                    >
+
+                    <span onclick="renderMore()">
+                        ➕ المزيد
+                    </span>
+
+                    >
+
+                    <span>
+                        📚 ${escapeHtml(data.title)}
+                    </span>
+
+                </div>
+
+                <h2 class="section-title">
+                    ${escapeHtml(data.icon || '📚')}
+                    ${escapeHtml(data.title)}
+                </h2>
+
+                ${
+                    data.description
+                    ? `
+                        <p style="
+                            text-align:center;
+                            color:var(--text-muted);
+                            margin:20px 0 30px;
+                        ">
+                            ${escapeHtml(data.description)}
+                        </p>
+                    `
+                    : ''
+                }
+
+                <div class="grid-container">
+
+                    <!-- المسار الأول -->
+                    ${
+                        data.link_1
+                        ? `
+                            <div
+                                class="card"
+                                onclick="openExternal(${inlineArg(data.link_1)})"
+                            >
+
+                                <div class="card-header-icon">
+                                    📖
+                                </div>
+
+                                <h3>
+                                    المسار الأول
+                                </h3>
+
+                                <p class="card-info">
+                                    ${escapeHtml(data.title)}
+                                </p>
+
+                                <div class="card-footer">
+
+                                    <span style="
+                                        color:var(--primary-color)
+                                    ">
+                                        🔗 المسار الأول
+                                    </span>
+
+                                    <span style="
+                                        font-weight:bold;
+                                        color:var(--secondary-color)
+                                    ">
+                                        [دخول]
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        `
+                        : ''
+                    }
+
+                    <!-- المسار الثاني -->
+                    ${
+                        data.link_2
+                        ? `
+                            <div
+                                class="card"
+                                onclick="openExternal(${inlineArg(data.link_2)})"
+                            >
+
+                                <div class="card-header-icon">
+                                    🎧
+                                </div>
+
+                                <h3>
+                                    المسار الثاني
+                                </h3>
+
+                                <p class="card-info">
+                                    ${escapeHtml(data.title)}
+                                </p>
+
+                                <div class="card-footer">
+
+                                    <span style="
+                                        color:var(--primary-color)
+                                    ">
+                                        🔗 المسار الثاني
+                                    </span>
+
+                                    <span style="
+                                        font-weight:bold;
+                                        color:var(--secondary-color)
+                                    ">
+                                        [دخول]
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        `
+                        : ''
+                    }
+
+                    ${
+                        !data.link_1 && !data.link_2
+                        ? `
+                            <p style="
+                                text-align:center;
+                                color:var(--text-muted);
+                                padding:30px;
+                                grid-column:1 / -1;
+                            ">
+                                لا توجد مسارات متاحة حالياً.
+                            </p>
+                        `
+                        : ''
+                    }
+
+                </div>
+
+            </div>
+        `;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في فتح محتوى المزيد:',
+            error
+        );
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل المحتوى.
+                </p>
+            </div>
+        `;
+    }
+}
+// =========================================
+// المصادر الخارجية
+// البيانات كلها من Supabase
+// =========================================
+
+async function renderAdditionalResources() {
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="loading-screen">
+            <div class="loading-spinner">🌐</div>
+            <p>جاري تحميل المصادر الخارجية...</p>
+        </div>
+    `;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('additional_resources')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // استخراج التصنيفات الموجودة في Supabase فقط
+        const categories = [
+            ...new Set(
+                (data || [])
+                    .map(item => item.category)
+                    .filter(Boolean)
+            )
+        ];
+
+        let html = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+                    <span onclick="resetView()">
+                        🏠 الرئيسية
+                    </span>
+                    >
+                    <span>
+                        🌐 مصادر خارجية
+                    </span>
+                </div>
+
+                <h2 class="section-title">
+                    🌐 مصادر خارجية
+                </h2>
+
+                <div class="grid-container">
+        `;
+
+        if (categories.length === 0) {
+
+            html += `
+                <p style="
+                    text-align:center;
+                    color:var(--text-muted);
+                    padding:30px;
+                    grid-column:1 / -1;
+                ">
+                    لا توجد مصادر خارجية متاحة حالياً.
+                </p>
+            `;
+
+        } else {
+
+            categories.forEach(category => {
+
+                const categoryResources = data.filter(
+                    item => item.category === category
+                );
+
+                // ناخد أيقونة أول مصدر في التصنيف
+                const categoryIcon =
+                    categoryResources.find(item => item.icon)?.icon || '📚';
+
+                html += `
+                    <div
+                        class="card"
+                        onclick="renderExternalResourcesByCategory(${inlineArg(category)})"
+                    >
+
+                        <div class="card-header-icon">
+                            ${escapeHtml(categoryIcon)}
+                        </div>
+
+                        <h3>
+                            ${escapeHtml(category)}
+                        </h3>
+
+                        <p class="card-info">
+                            ${categoryResources.length} مصدر متاح
+                        </p>
+
+                        <div class="card-footer">
+
+                            <span style="
+                                color:var(--primary-color);
+                                font-weight:bold;
+                            ">
+                                ${categoryResources.length} مصدر
+                            </span>
+
+                            <span style="
+                                color:var(--secondary-color);
+                                font-weight:bold;
+                            ">
+                                [دخول]
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        contentArea.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في تحميل المصادر الخارجية:',
+            error
+        );
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل المصادر الخارجية.
+                </p>
+            </div>
+        `;
+    }
+}
+// =========================================
+// عرض مصادر التصنيف
+// البيانات كلها من Supabase
+// =========================================
+
+async function renderExternalResourcesByCategory(category) {
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="loading-screen">
+            <div class="loading-spinner">📚</div>
+            <p>جاري تحميل المصادر...</p>
+        </div>
+    `;
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('additional_resources')
+            .select('*')
+            .eq('category', category)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        let html = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+
+                    <span onclick="resetView()">
+                        🏠 الرئيسية
+                    </span>
+
+                    >
+
+                    <span onclick="renderAdditionalResources()">
+                        🌐 مصادر خارجية
+                    </span>
+
+                    >
+
+                    <span>
+                        ${escapeHtml(category)}
+                    </span>
+
+                </div>
+
+                <h2 class="section-title">
+                    ${escapeHtml(category)}
+                </h2>
+
+                <div class="grid-container">
+        `;
+
+        if (!data || data.length === 0) {
+
+            html += `
+                <p style="
+                    text-align:center;
+                    color:var(--text-muted);
+                    padding:30px;
+                    grid-column:1 / -1;
+                ">
+                    لا توجد مصادر متاحة في هذا التصنيف حالياً.
+                </p>
+            `;
+
+        } else {
+
+            data.forEach(item => {
+
+                html += `
+                <div 
+                    class="card external-resource-card"
+                    onclick="openAdditionalResource(${inlineArg(item.id)})"
+                >
+
+                    <div class="card-header-icon">
+                        ${escapeHtml(item.content_icon || item.icon || '📚')}
+                    </div>
+
+                    <h3>
+                        ${escapeHtml(item.title)}
+                    </h3>
+
+                    ${
+                        item.description
+                        ? `
+                            <p class="card-info">
+                                ${escapeHtml(item.description)}
+                            </p>
+                        `
+                        : ''
+                    }
+
+                    <div class="card-footer">
+
+                        <span>
+                            ${escapeHtml(item.category || '')}
+                        </span>
+
+                        <span class="external-resource-arrow">
+                            فتح ↗
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+            });
+
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        contentArea.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في تحميل مصادر التصنيف:',
+            error
+        );
+
+        contentArea.innerHTML = `
+            <div class="fade-in">
+
+                <p style="
+                    text-align:center;
+                    color:red;
+                    padding:30px;
+                ">
+                    حدث خطأ أثناء تحميل المصادر.
+                </p>
+
+            </div>
+        `;
+    }
+}
+async function openAdditionalResource(id) {
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from('additional_resources')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) throw error;
+
+        if (!data) {
+            console.error('❌ لم يتم العثور على المصدر');
+            return;
+        }
+
+        document.getElementById('contentArea').innerHTML = `
+            <div class="fade-in">
+
+                <div class="breadcrumb">
+                    <span onclick="resetView()">🏠 الرئيسية</span>
+                    >
+                    <span onclick="renderAdditionalResources()">
+                        🌐 مصادر خارجية
+                    </span>
+                    >
+                    <span>${escapeHtml(data.title)}</span>
+                </div>
+
+                <div class="external-resource-card">
+
+            <div class="external-resource-icon">
+                    ${escapeHtml(data.content_icon || '📚')}
+            </div>
+
+    <h2 class="external-resource-title">
+        ${escapeHtml(data.title)}
+    </h2>
+
+    ${
+        data.description
+        ? `
+            <p class="external-resource-description">
+                ${escapeHtml(data.description)}
+            </p>
+        `
+        : ''
+    }
+            ${
+            data.created_at
+            ? `
+                <div class="external-resource-date">
+                    تاريخ الإضافة:
+                    ${new Date(data.created_at).toLocaleDateString('ar-EG', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
+                </div>
+            `
+            : ''
+        }
+
+    ${
+        data.link
+        ? `
+            <div class="external-resource-action">
+                <a
+                    href="${escapeHtml(safeUrl(data.link) || '#')}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="external-resource-button"
+                >
+                    فتح المصدر
+                </a>
+            </div>
+        `
+        : ''
+    }
+
+</div>
+            </div>
+        `;
+
+    } catch (error) {
+
+        console.error(
+            '❌ خطأ في فتح المصدر الإضافي:',
+            error
+        );
+
+    }
+}
+function openMorePdf(item, title, icon) {
+
+    if (!item || !item.pdf_url) {
+        alert("رابط ملف الـ PDF غير متوفر.");
+        return;
+    }
+
+    const contentArea = document.getElementById('contentArea');
+
+    contentArea.innerHTML = `
+        <div class="fade-in material-view">
+
+            <div class="breadcrumb">
+
+                <span onclick="resetView()">
+                    🏠 الرئيسية
+                </span>
+
+                >
+
+                <span onclick="renderMore()">
+                    ➕ المزيد
+                </span>
+
+                >
+
+                <span>
+                    🏫 شؤون الطلاب
+                </span>
+
+                >
+
+                <span>
+                    ${escapeHtml(icon)} ${escapeHtml(title)}
+                </span>
+
+                >
+
+                <span>
+                    ${escapeHtml(item.title)}
+                </span>
+
+            </div>
+
+            <h2 class="section-title">
+                ${escapeHtml(icon)} ${escapeHtml(item.title)}
+            </h2>
+
+            <div class="material-file-card">
+
+                <div class="material-file-top">
+
+                    <div class="material-file-icon">
+                        📄
+                    </div>
+
+                    <h3 class="material-file-title">
+                        ${escapeHtml(item.title)}
+                    </h3>
+
+                </div>
+
+                <p class="material-file-description">
+                    ${item.year ? `العام ${escapeHtml(item.year)}` : ''}
+                </p>
+
+                <div class="material-file-info">
+                    <span>📄 PDF</span>
+                    <span>${escapeHtml(title)}</span>
+                </div>
+
+                <div class="material-file-actions">
+
+                    <a
+                        href="${escapeHtml(safeUrl(item.pdf_url) || '#')}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="material-open-btn"
+                    >
+                        <span>👁️</span>
+                        <span>فتح الملف</span>
+                    </a>
+
+                    <button
+                        type="button"
+                        class="material-download-btn"
+                        onclick="downloadMaterialFile(
+                            ${inlineArg(item.pdf_url)},
+                            ${inlineArg(item.title)}
+                        )"
+                    >
+                        <span>⬇️</span>
+                        <span>تحميل الملف</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+/* الوضع الليلي/النهاري: منطقه في js/header.js (toggleTheme) — لا تكرره هنا */
+
+/* =========================================
+   تحديد رابط الهيدر النشط تلقائيًا
+========================================= */
+
+function updateHeaderActiveLink() {
+    const links = document.querySelectorAll('.main-nav .nav-link');
+    const currentPath = window.location.pathname.toLowerCase();
+
+    let activeNav = 'home';
+
+    if (/\/student_dashboard(?:\.html)?\/?$/.test(currentPath)) {
+        activeNav = 'dashboard';
+    } else if (/\/about\/about\.html$/.test(currentPath)) {
+        activeNav = 'about';
+    } else if (/\/faculty\/faculty\.html$/.test(currentPath)) {
+        activeNav = 'faculty';
+    } else if (/\/community\/community\.html$/.test(currentPath)) {
+        activeNav = 'community';
+    } else if (/\/tools\/tools\.html$/.test(currentPath)) {
+        activeNav = 'tools';
+    }
+
+    links.forEach(link => {
+        const isActive = link.dataset.nav === activeNav;
+
+        link.classList.toggle('active', isActive);
+
+        if (isActive) {
+            link.setAttribute('aria-current', 'page');
+        } else {
+            link.removeAttribute('aria-current');
         }
     });
+
+    // على الموبايل شريط الروابط قابل للتمرير الأفقي: نُظهر الرابط النشط داخله
+    const nav = document.querySelector('.main-nav');
+    const activeLink = nav && nav.querySelector('.nav-link.active');
+
+    if (activeLink && nav.scrollWidth > nav.clientWidth) {
+        activeLink.scrollIntoView({ block: 'nearest', inline: 'center' });
+    }
 }
 
-function handleGlobalSearch(query) {
-    if (!query || !query.trim()) return;
-}
+document.addEventListener('DOMContentLoaded', updateHeaderActiveLink);

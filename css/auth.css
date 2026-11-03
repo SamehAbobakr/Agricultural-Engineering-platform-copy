@@ -1,0 +1,611 @@
+/* =========================================
+   صفحات المصادقة (login.html و reset-password.html)
+   - نُقلت هنا تنسيقات صفحة الدخول التي كانت مضمّنة داخل login.html لتشاركها الصفحتان.
+   - كل شيء مقيّد بالصنف .login-page فلا يؤثر على أي صفحة أخرى.
+   - الألوان من متغيرات المنصة (variables.css) فيعمل الوضعان الليلي والنهاري تلقائيًا.
+   - تحمَّل بعد: variables → layout → components → navigation → style → responsive
+========================================= */
+
+.login-page {
+    /* ألوان الحالات: أفتح في الليلي وأغمق في النهاري للحفاظ على وضوح النص */
+    --auth-danger: #f87171;
+    --auth-danger-bg: rgba(239, 68, 68, .12);
+    --auth-danger-border: rgba(239, 68, 68, .3);
+    --auth-success: #34d399;
+    --auth-link: #34d399;
+
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: var(--bg-color);
+}
+
+html.light-mode .login-page,
+body.light-mode .login-page {
+    --auth-danger: #dc2626;
+    --auth-danger-bg: rgba(220, 38, 38, .07);
+    --auth-danger-border: rgba(220, 38, 38, .28);
+    --auth-success: #047857;
+    --auth-link: #047857;
+}
+
+.login-page [hidden] {
+    display: none !important;
+}
+
+/* خلفية الشبكة */
+.login-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        linear-gradient(rgba(51, 65, 85, .45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(51, 65, 85, .45) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 5%, transparent 68%);
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 5%, transparent 68%);
+}
+
+html.light-mode .login-page::before,
+body.light-mode .login-page::before {
+    opacity: .22;
+}
+
+/* ضوء خلفي ملون */
+.login-page::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(circle 500px at 70% 20%, rgba(16, 185, 129, .09), transparent),
+        radial-gradient(circle 400px at 20% 75%, rgba(59, 130, 246, .07), transparent);
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+/* بطاقة تسجيل الدخول */
+.login-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    padding: 36px 32px 32px;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, .25),
+        0 0 0 1px rgba(16, 185, 129, .06);
+}
+
+html.light-mode .login-card,
+body.light-mode .login-card {
+    box-shadow:
+        0 6px 24px rgba(15, 23, 42, .08),
+        0 0 0 1px rgba(16, 185, 129, .08);
+}
+
+/* رأس البطاقة */
+.login-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    border: 1px solid rgba(16, 185, 129, .2);
+    background: linear-gradient(145deg, rgba(16, 185, 129, .17), rgba(16, 185, 129, .06));
+    color: var(--primary-color);
+    margin-bottom: 14px;
+}
+
+.login-logo svg {
+    width: 32px;
+    height: 32px;
+}
+
+.login-header h1 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 6px;
+    line-height: 1.35;
+}
+
+.login-header p {
+    color: var(--text-muted);
+    font-size: .92rem;
+    margin: 0;
+    line-height: 1.7;
+}
+
+/* تبويبات (دخول / إنشاء حساب) */
+.auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 4px;
+    margin-bottom: 20px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+}
+
+.auth-tab {
+    height: 42px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-muted);
+    font: 700 .92rem var(--font-main);
+    cursor: pointer;
+    transition: background .2s, color .2s, box-shadow .2s;
+}
+
+.auth-tab:hover {
+    color: var(--text-main);
+}
+
+.auth-tab[aria-selected="true"] {
+    background: var(--card-bg);
+    color: var(--auth-link);
+    box-shadow: 0 0 0 1px var(--primary-color) inset;
+}
+
+.auth-tab:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* حقول الإدخال */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-label {
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.form-input-wrap {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 44px 0 14px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-main);
+    font: 500 .97rem/1 'Cairo', sans-serif;
+    direction: rtl;
+    box-sizing: border-box;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.form-input.has-toggle {
+    padding-left: 44px;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+    opacity: .6;
+    font-weight: 400;
+}
+
+.form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .13);
+}
+
+.form-input.invalid {
+    border-color: var(--auth-danger);
+    box-shadow: 0 0 0 3px var(--auth-danger-bg);
+}
+
+/* أيقونة الحقل */
+.input-icon {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 16px;
+    pointer-events: none;
+    line-height: 1;
+}
+
+/* زر إظهار/إخفاء كلمة المرور */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .2s;
+}
+
+.toggle-password:hover { color: var(--primary-color); }
+
+.toggle-password:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* رسائل الخطأ تحت الحقول */
+.field-error {
+    display: none;
+    font-size: .82rem;
+    color: var(--auth-danger);
+    margin-top: 2px;
+}
+
+.field-error.visible { display: block; }
+
+/* شروط كلمة المرور */
+.pw-rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    font-size: .8rem;
+    color: var(--text-muted);
+}
+
+.pw-rules li::before {
+    content: "○";
+    margin-inline-end: 6px;
+}
+
+.pw-rules li.met {
+    color: var(--auth-success);
+}
+
+.pw-rules li.met::before {
+    content: "✓";
+    font-weight: 700;
+}
+
+/* رابط «نسيت كلمة المرور؟» */
+.auth-forgot-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: -6px;
+}
+
+.auth-link-btn {
+    background: none;
+    border: 0;
+    padding: 4px 0;
+    color: var(--auth-link);
+    font: 600 .86rem var(--font-main);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.auth-link-btn:hover { text-decoration: underline; }
+
+.auth-link-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.auth-link-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* زر تسجيل الدخول / الإرسال */
+.login-btn {
+    width: 100%;
+    height: 50px;
+    margin-top: 4px;
+    border: none;
+    border-radius: 13px;
+    background: var(--primary-color);
+    color: #fff;
+    font: 700 1rem 'Cairo', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: filter .2s, transform .15s;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.login-btn:active { transform: translateY(0); }
+
+.login-btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+}
+
+/* زر ثانوي (إطار فقط) */
+.auth-btn-secondary {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-main);
+    font: 600 .93rem var(--font-main);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background .2s, border-color .2s;
+}
+
+.auth-btn-secondary:hover {
+    background: var(--bg-color);
+    border-color: var(--primary-color);
+}
+
+.auth-btn-secondary:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.auth-btn-secondary:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* مؤشر التحميل داخل الزر */
+.btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, .35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: auth-spin .6s linear infinite;
+}
+
+.login-btn.loading .btn-spinner { display: block; }
+.login-btn.loading .btn-text    { display: none; }
+
+@keyframes auth-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-spinner { animation-duration: 1.6s; }
+    .login-btn, .auth-tab, .form-input { transition: none; }
+}
+
+/* رسالة النجاح / الخطأ العامة */
+.login-alert {
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    border-radius: 11px;
+    font-size: .9rem;
+    font-weight: 500;
+    line-height: 1.7;
+    border: 1px solid transparent;
+}
+
+.login-alert.visible { display: flex; }
+
+.login-alert.error {
+    background: var(--auth-danger-bg);
+    border-color: var(--auth-danger-border);
+    color: var(--auth-danger);
+}
+
+.login-alert.success {
+    background: rgba(16, 185, 129, .10);
+    border-color: rgba(16, 185, 129, .25);
+    color: var(--auth-success);
+}
+
+.alert-icon { flex-shrink: 0; font-size: 16px; }
+
+/* أزرار إضافية تحت الرسالة (إعادة الإرسال، التنقل بين الأوضاع) */
+.auth-alert-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: -6px 0 16px;
+}
+
+/* الفاصل بين الطرق */
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.google-login-btn {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    font: 600 .95rem 'Cairo', sans-serif;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+
+.google-login-btn:hover {
+    background: var(--bg-color);
+    border-color: var(--primary-color);
+}
+
+.google-login-btn:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+.google-login-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* شاشة الإشعار (تحقق من بريدك / أنت مسجّل بالفعل / الرابط غير صالح) */
+.auth-notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.auth-notice-icon {
+    font-size: 2.6rem;
+    line-height: 1;
+}
+
+.auth-notice h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.auth-notice p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: .92rem;
+    line-height: 1.8;
+}
+
+.auth-notice strong {
+    color: var(--text-main);
+    overflow-wrap: anywhere;
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+.auth-notice-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+/* تذييل البطاقة */
+.login-footer {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+
+.login-footer a {
+    color: var(--auth-link);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover { text-decoration: underline; }
+
+/* --- الوضع النهاري --- */
+html.light-mode .form-input,
+body.light-mode .form-input {
+    background: #f8fafc;
+}
+
+/* --- الموبايل --- */
+@media (max-width: 480px) {
+    .login-page {
+        padding: 20px 12px;
+    }
+
+    .login-card {
+        padding: 28px 20px 24px;
+        border-radius: 18px;
+    }
+
+    .login-header h1 { font-size: 1.25rem; }
+}
+
+/* مؤشر التحميل في شاشة التحقق من الرابط */
+.auth-spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: auth-spin .8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-spinner { animation-duration: 2s; }
+}

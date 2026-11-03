@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>الغرفة | عن الكلية | منصة الهندسة الزراعية</title>
+<meta name="description" content="غرفة من غرف استكشاف كلية الهندسة الزراعية: مهمات ومحتوى وتقدمك.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- ملفات التنسيق المشتركة (كما في بقية الصفحات) -->
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<!-- تنسيق نظام الغرف فقط (أصناف rm-* معزولة) -->
+<link rel="stylesheet" href="css/rooms.css">
+
+<script>
+/* الثيم يُطبَّق مبكرًا من js/header.js (المصدر الوحيد للثيم) */
+document.documentElement.classList.add('js');
+</script>
+
+<script src="../js/auth.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/clarity.js"></script>
+</head>
+
+<body class="rm-body">
+
+<!-- الهيدر الرئيسي -->
+<!-- =========================
+     الهيدر الرئيسي
+========================== -->
+<header class="main-header">
+    <div class="header-container">
+
+        <!-- شعار واسم المنصة -->
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+
+        <!-- روابط التنقل (الكمبيوتر) -->
+        <nav class="main-nav" aria-label="التنقل الرئيسي">
+    <a href="../index.html" class="nav-link" data-nav="home">الرئيسية</a>
+    <a href="../student_dashboard/index.html" class="nav-link" data-nav="dashboard">لوحة إنجاز الطالب</a>
+    <a href="../about/about.html" class="nav-link active" aria-current="page" data-nav="about">عن الكلية</a>
+    <a href="../faculty/faculty.html" class="nav-link" data-nav="faculty">دليل هيئة التدريس</a>
+    <a href="../community/community.html" class="nav-link" data-nav="community">مجتمع الطلاب والخريجين</a>
+    <a href="../tools/tools.html" class="nav-link" data-nav="tools">الأدوات</a>
+        </nav>
+
+        <div class="nav-desktop-actions" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <a href="../login.html" class="nav-action-link login-link" data-nav="login">تسجيل الدخول</a>
+            <a href="https://wa.me/201551743249" class="nav-action-link" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+        </div>
+
+        <!-- الوضع الليلي -->
+        <button type="button" class="theme-toggle" id="themeToggle"
+            aria-label="تغيير الوضع" title="الوضع النهاري أو الليلي"
+            onclick="toggleTheme()">🌙</button>
+
+        <!-- زر الهمبرجر (الموبايل فقط) -->
+        <button type="button" class="hamburger-btn" id="hamburgerBtn"
+            aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobileNavDrawer">
+            <span class="hamburger-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
+        </button>
+
+    </div>
+</header>
+
+<!-- ستارة القائمة الجانبية -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+<!-- درج القائمة الجانبية (الموبايل) -->
+<nav class="mobile-nav-drawer" id="mobileNavDrawer"
+    aria-label="قائمة التنقل" aria-hidden="false">
+
+    <div class="drawer-header">
+        <a href="../index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn"
+            aria-label="إغلاق القائمة">×</button>
+    </div>
+
+    <div class="drawer-nav">
+            <a href="../index.html" class="drawer-nav-link" data-nav="home"><span class="link-icon">🏠</span>الرئيسية</a>
+            <a href="../student_dashboard/index.html" class="drawer-nav-link" data-nav="dashboard"><span class="link-icon">📊</span>لوحة إنجاز الطالب</a>
+            <a href="../about/about.html" class="drawer-nav-link active" data-nav="about"><span class="link-icon">🎓</span>عن الكلية</a>
+            <a href="../faculty/faculty.html" class="drawer-nav-link" data-nav="faculty"><span class="link-icon">👨‍🏫</span>دليل هيئة التدريس</a>
+            <a href="../community/community.html" class="drawer-nav-link" data-nav="community"><span class="link-icon">🤝</span>مجتمع الطلاب والخريجين</a>
+            <a href="../tools/tools.html" class="drawer-nav-link" data-nav="tools"><span class="link-icon">🛠️</span>الأدوات</a>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-action-group">
+        <a href="../login.html" class="drawer-action-btn primary">
+            <span>🔑</span> تسجيل الدخول
+        </a>
+        <a href="https://wa.me/201551743249" class="drawer-action-btn" target="_blank" rel="noopener noreferrer"><span>💬</span> تواصل معنا</a>
+    </div>
+
+</nav>
+
+<main class="rm-main">
+    <div class="rm-wrap rm-room-section">
+        <div id="rmRoomHead"></div>
+        <h2 class="rm-visually-hidden">مهمات الغرفة</h2>
+        <div class="rm-tasks" id="rmTasks" aria-busy="true"></div>
+    </div>
+</main>
+
+<!-- =========================
+     الفوتر
+========================== -->
+<footer class="main-footer">
+    <p>© 2026 Sameh Abobakr — منصة كلية الهندسة الزراعية</p>
+</footer>
+
+<!-- عميل Supabase الوحيد للصفحة (يُنشأ في auth.js) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+
+<!-- نظام الغرف: الترتيب مهم (كل ملف يعتمد على ما قبله) -->
+<script src="js/rooms-config.js"></script>
+<script src="js/rooms-utils.js"></script>
+<script src="js/rooms-api.js"></script>
+<script src="js/rooms-progress.js"></script>
+<script src="js/rooms-blocks.js"></script>
+<script src="js/rooms-viewer.js"></script>
+<script src="js/rooms-room.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+/* =========================================
+   متغيرات التصميم
+========================================= */
+
+:root {
+    /* الخط الأساسي للمنصة (يُحمَّل Cairo من Google Fonts في كل صفحة) */
+    --font-main: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+
+    --border-color: #334155;
+
+    --primary-color: #10b981;
+    --secondary-color: #3b82f6;
+
+    --grade-1: #3b82f6;
+    --grade-2: #10b981;
+    --grade-3: #f59e0b;
+    --grade-4: #a855f7;
+}
+
+/* =========================================
+   الوضع النهاري
+========================================= */
+
+html.light-mode,
+body.light-mode {
+    --bg-color: #f1f5f9;
+    --card-bg: #ffffff;
+
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+
+    --border-color: #e2e8f0;
+
+    --primary-color: #10b981;
+    --secondary-color: #3b82f6;
+
+    --grade-1: #3b82f6;
+    --grade-2: #10b981;
+    --grade-3: #f59e0b;
+    --grade-4: #a855f7;
+}
+
+

@@ -1,0 +1,233 @@
+
+
+
+
+/* =========================================
+   قائمة الفرق
+========================================= */
+
+.content-status-list {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+
+/* كارت الفرقة */
+
+.content-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    min-height: 56px;
+    padding: 13px 15px;
+
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+
+    border-radius: 13px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* حركة بسيطة */
+
+.content-status-item:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(34, 197, 94, 0.35);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================
+   اسم الفرقة
+========================================= */
+
+.content-status-grade {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    white-space: nowrap;
+}
+
+.content-status-grade strong {
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+
+/* النقطة */
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 4px rgba(34, 197, 94, 0.09);
+}
+
+
+/* =========================================
+   حالة الترم
+========================================= */
+
+.content-status-text {
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    background: rgba(34, 197, 94, 0.09);
+    color: #15803d;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   الموبايل
+========================================= */
+
+@media (max-width: 768px) {
+
+    .content-status-card {
+        margin: 22px 0;
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .content-status-header {
+        margin-bottom: 17px;
+    }
+
+    .content-status-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .content-status-header p {
+        font-size: 0.78rem;
+        line-height: 1.6;
+    }
+
+    .content-status-icon {
+        width: 40px;
+        height: 40px;
+
+        border-radius: 11px;
+
+        font-size: 1.15rem;
+    }
+
+    .content-status-list {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .content-status-item {
+        min-height: 50px;
+        padding: 11px 12px;
+    }
+
+    .content-status-grade strong {
+        font-size: 0.84rem;
+    }
+
+    .content-status-text {
+        font-size: 0.7rem;
+        padding: 5px 8px;
+    }
+}
+
+
+/* =========================================
+   الموبايل الصغير
+========================================= */
+
+@media (max-width: 420px) {
+
+    .content-status-card {
+        padding: 15px;
+    }
+
+    .content-status-header {
+        gap: 10px;
+    }
+
+    .content-status-header h2 {
+        font-size: 1rem;
+    }
+
+    .content-status-header p {
+        font-size: 0.72rem;
+    }
+
+    .content-status-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .content-status-text {
+        margin-right: 19px;
+    }
+}
+/* =========================================
+   برنامج المحتوى الدراسي
+========================================= */
+
+.content-status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.content-status-program {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--primary-color);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.program-icon {
+    font-size: 0.9rem;
+}
+
+.content-status-grade {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.content-status-grade .status-dot {
+    width: 8px;
+    height: 8px;
+}

@@ -1,0 +1,503 @@
+/* =========================================
+   صفحة المادة
+========================================= */
+
+.material-view {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 25px;
+}
+
+
+/* =========================================
+   البحث داخل المادة
+========================================= */
+
+.inner-search {
+    width: 100%;
+    padding: 10px 15px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-main);
+    outline: none;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+}
+
+.inner-search:focus {
+    border-color: var(--primary-color);
+}
+
+
+/* =========================================
+   تبويبات المادة
+========================================= */
+
+.material-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    background: var(--primary-color);
+    color: #000;
+    font-weight: bold;
+    border-color: var(--primary-color);
+}
+
+
+/* =========================================
+   شبكة ملفات المادة
+========================================= */
+
+.material-files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+    width: 100%;
+}
+
+
+/* =========================================
+   كارت الملف
+========================================= */
+
+.material-file-card {
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================
+   تأثير الكمبيوتر فقط
+========================================= */
+
+@media (hover: hover) {
+
+    .material-file-card:hover {
+        transform: translateY(-4px);
+
+        border-color: rgba(16, 185, 129, 0.55);
+
+        box-shadow:
+            0 10px 25px
+            rgba(0, 0, 0, 0.28);
+    }
+}
+
+
+/* =========================================
+   الجزء العلوي للكارت
+========================================= */
+
+.material-file-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+
+/* =========================================
+   أيقونة الملف
+========================================= */
+
+.material-file-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.18);
+
+    font-size: 24px;
+}
+
+
+/* =========================================
+   عنوان الملف
+========================================= */
+
+.material-file-title {
+    color: var(--text-main);
+
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.6;
+
+    margin: 0;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   وصف الملف
+========================================= */
+
+.material-file-description {
+    color: var(--text-muted);
+
+    font-size: 0.82rem;
+    line-height: 1.7;
+
+    margin: 0 0 16px;
+    min-height: 45px;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+    word-break: break-word;
+}
+
+
+/* =========================================
+   معلومات الملف
+========================================= */
+
+.material-file-info {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.material-file-info span {
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 6px;
+    padding: 4px 7px;
+}
+
+
+/* =========================================
+   أزرار الملف
+========================================= */
+
+.material-file-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    width: 100%;
+    margin-top: auto;
+}
+
+
+/* =========================================
+   زر فتح الملف
+========================================= */
+
+.material-open-btn {
+    width: 100%;
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: var(--primary-color);
+    color: #06130e;
+
+    border: 1px solid var(--primary-color);
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-family: inherit;
+
+    font-size: 0.86rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.material-open-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 16px
+        rgba(16, 185, 129, 0.22);
+}
+
+.material-open-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   زر التحميل
+========================================= */
+
+.material-download-btn {
+    width: 100%;
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: var(--secondary-color);
+
+    border: 1px solid rgba(59, 130, 246, 0.38);
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.material-download-btn:hover {
+    transform: translateY(-1px);
+
+    background: rgba(59, 130, 246, 0.1);
+
+    border-color: var(--secondary-color);
+}
+
+.material-download-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   ضمان تفاعل الأزرار والروابط
+========================================= */
+
+.material-file-card a,
+.material-file-card button {
+    position: relative;
+    z-index: 5;
+
+    pointer-events: auto;
+
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+/* =========================================
+   الموبايل
+========================================= */
+
+@media (max-width: 768px) {
+
+    .material-view {
+        padding: 12px;
+        border-radius: 11px;
+    }
+
+    .material-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .tab-btn {
+        width: 100%;
+        min-height: 42px;
+        padding: 7px 5px;
+        font-size: 0.75rem;
+    }
+
+    .material-files-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .material-file-card {
+        padding: 11px;
+        border-radius: 12px;
+    }
+
+    .material-file-top {
+        gap: 7px;
+        margin-bottom: 9px;
+    }
+
+    .material-file-icon {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+
+        border-radius: 8px;
+        font-size: 18px;
+    }
+
+    .material-file-title {
+        font-size: 0.76rem;
+        line-height: 1.45;
+    }
+
+    .material-file-description {
+        font-size: 0.63rem;
+        line-height: 1.5;
+
+        min-height: 34px;
+        margin-bottom: 9px;
+
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .material-file-info {
+        gap: 4px;
+
+        margin-bottom: 9px;
+        padding-bottom: 8px;
+
+        font-size: 0.55rem;
+    }
+
+    .material-file-info span {
+        padding: 3px 5px;
+    }
+
+    .material-file-actions {
+        gap: 5px;
+    }
+
+    .material-open-btn {
+        min-height: 37px;
+        border-radius: 7px;
+
+        font-size: 0.69rem;
+        gap: 5px;
+    }
+
+    .material-download-btn {
+        min-height: 34px;
+        border-radius: 7px;
+
+        font-size: 0.64rem;
+        gap: 4px;
+    }
+}
+
+
+/* =========================================
+   الموبايلات الصغيرة جدًا
+========================================= */
+
+@media (max-width: 380px) {
+
+    .material-files-grid {
+        gap: 7px;
+    }
+
+    .material-file-card {
+        padding: 9px;
+    }
+
+    .material-file-icon {
+        width: 31px;
+        height: 31px;
+        min-width: 31px;
+
+        font-size: 16px;
+    }
+
+    .material-file-title {
+        font-size: 0.7rem;
+    }
+
+    .material-file-description {
+        font-size: 0.58rem;
+    }
+
+    .material-open-btn {
+        min-height: 35px;
+        font-size: 0.64rem;
+    }
+
+    .material-download-btn {
+        min-height: 32px;
+        font-size: 0.59rem;
+    }
+}
+
+
+/* =========================================
+   منع خروج عناصر المادة خارج الشاشة
+========================================= */
+
+.material-view,
+.material-files-grid,
+.material-file-card {
+    max-width: 100%;
+    min-width: 0;
+}

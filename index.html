@@ -1,218 +1,537 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>منصة كلية الهندسة الزراعية - جامعة الأزهر</title>
+<title>منصة كلية الهندسة الزراعية</title>
+<meta name="description" content="منصة مجانية لمقررات ومحاضرات وملفات كلية الهندسة الزراعية – جامعة الأزهر.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚜%3C/text%3E%3C/svg%3E">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+
+
+
+<!-- خط المنصة -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- =========================
+     CSS
+========================== -->
+
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/navigation.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/materials.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/ai.css">
+<link rel="stylesheet" href="css/search.css">
+
+<!-- Microsoft Clarity -->
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/clarity.js"></script>
 </head>
+
+
 
 <body>
 
-    <!-- =========================
-         الهيدر
-    ========================== -->
-    <header class="main-header">
 
-        <div class="header-container">
 
-            <div class="logo-area">
-                <span class="logo-icon">🚜</span>
+<!-- =========================
+     الهيدر الرئيسي
+========================== -->
+<header class="main-header">
+    <div class="header-container">
 
-                <h1>
-                    كلية الهندسة الزراعية - جامعة الأزهر
-                </h1>
-            </div>
+        <!-- شعار واسم المنصة -->
+        <a href="index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
 
-            <div class="user-info-area">
-                <span class="welcome-text">
-                    مرحباً بك فى منصة الهندسة الزراعية
-                </span>
-            </div>
+        <!-- روابط التنقل (الكمبيوتر) -->
+        <nav class="main-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" class="nav-link active" aria-current="page" data-nav="home">الرئيسية</a>
+    <a href="student_dashboard/index.html" class="nav-link" data-nav="dashboard">لوحة إنجاز الطالب</a>
+    <a href="about/about.html" class="nav-link" data-nav="about">عن الكلية</a>
+    <a href="faculty/faculty.html" class="nav-link" data-nav="faculty">دليل هيئة التدريس</a>
+    <a href="community/community.html" class="nav-link" data-nav="community">مجتمع الطلاب والخريجين</a>
+    <a href="tools/tools.html" class="nav-link" data-nav="tools">الأدوات</a>
+        </nav>
 
+        <div class="nav-desktop-actions" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <a href="login.html" class="nav-action-link login-link" data-nav="login">تسجيل الدخول</a>
+            <a href="https://wa.me/201551743249" class="nav-action-link" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
         </div>
 
-    </header>
+        <!-- الوضع الليلي -->
+        <button type="button" class="theme-toggle" id="themeToggle"
+            aria-label="تغيير الوضع" title="الوضع النهاري أو الليلي"
+            onclick="toggleTheme()">🌙</button>
+
+        <!-- زر الهمبرجر (الموبايل فقط) -->
+        <button type="button" class="hamburger-btn" id="hamburgerBtn"
+            aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobileNavDrawer">
+            <span class="hamburger-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
+        </button>
+
+    </div>
+</header>
+
+<!-- ستارة القائمة الجانبية -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+<!-- درج القائمة الجانبية (الموبايل) -->
+<nav class="mobile-nav-drawer" id="mobileNavDrawer"
+    aria-label="قائمة التنقل" aria-hidden="false">
+
+    <div class="drawer-header">
+        <a href="index.html" class="logo-area" aria-label="الصفحة الرئيسية">
+            <span class="logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M19 3h10l1.4 5.1 4.1 1.7 4.7-2.5 5 8.7-3.8 3.6v4.8l3.8 3.6-5 8.7-4.7-2.5-4.1 1.7L29 43H19l-1.4-5.1-4.1-1.7-4.7 2.5-5-8.7 3.8-3.6v-4.8l-3.8-3.6 5-8.7 4.7 2.5 4.1-1.7L19 3Z"
+                        stroke="currentColor" stroke-width="2.5"
+                        stroke-linejoin="round"/>
+                    <circle cx="24" cy="24" r="9"
+                        stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M24 29v-9m0 5c-5 0-6-4-6-4 4-1 6 1 6 4Zm0-3c0-4 3-6 6-6 0 4-2 6-6 6Z"
+                        stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="logo-text">
+                <strong>منصة الهندسة الزراعية</strong>
+                <small>جامعة الأزهر</small>
+            </span>
+        </a>
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn"
+            aria-label="إغلاق القائمة">×</button>
+    </div>
+
+    <div class="drawer-nav">
+            <a href="index.html" class="drawer-nav-link active" data-nav="home"><span class="link-icon">🏠</span>الرئيسية</a>
+            <a href="student_dashboard/index.html" class="drawer-nav-link" data-nav="dashboard"><span class="link-icon">📊</span>لوحة إنجاز الطالب</a>
+            <a href="about/about.html" class="drawer-nav-link" data-nav="about"><span class="link-icon">🎓</span>عن الكلية</a>
+            <a href="faculty/faculty.html" class="drawer-nav-link" data-nav="faculty"><span class="link-icon">👨‍🏫</span>دليل هيئة التدريس</a>
+            <a href="community/community.html" class="drawer-nav-link" data-nav="community"><span class="link-icon">🤝</span>مجتمع الطلاب والخريجين</a>
+            <a href="tools/tools.html" class="drawer-nav-link" data-nav="tools"><span class="link-icon">🛠️</span>الأدوات</a>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-action-group">
+        <a href="login.html" class="drawer-action-btn primary">
+            <span>🔑</span> تسجيل الدخول
+        </a>
+        <a href="https://wa.me/201551743249" class="drawer-action-btn" target="_blank" rel="noopener noreferrer"><span>💬</span> تواصل معنا</a>
+    </div>
+
+</nav>
 
 
-    <!-- =========================
-         الهيكل الرئيسي
-    ========================== -->
-    <div class="app-layout">
 
 
-        <!-- =========================
-             القائمة الجانبية
-        ========================== -->
-
-        <aside class="sidebar" id="sidebarContainer">
-
-            <div class="sidebar-brand">
-                قائمة التنقل
-            </div>
 
 
-            <ul class="sidebar-menu">
 
-                <!-- الرئيسية -->
-                <li class="menu-item active"
-                    onclick="resetView()">
+<!-- =========================
+     الهيكل الرئيسي
+========================== -->
 
-                    <span class="menu-icon">🏠</span>
+<div class="app-layout">
 
-                    الرئيسية
+    <main class="content-area" id="contentArea">
+        <!-- المحتوى يتم إنشاؤه بواسطة JavaScript -->
+    </main>
 
-                </li>
-
-
-                <!-- الفرقة الأولى -->
-                <li class="menu-item"
-                    onclick="selectGrade('الفرقة الأولى')">
-
-                    <span class="menu-icon">📘</span>
-
-                    الفرقة الأولى
-
-                </li>
+</div>
 
 
-                <!-- الفرقة الثانية -->
-                <li class="menu-item"
-                    onclick="selectGrade('الفرقة الثانية')">
 
-                    <span class="menu-icon">📗</span>
+<!-- =========================
+     زر الدعم والتواصل
+========================== -->
 
-                    الفرقة الثانية
+<div class="floating-contact">
 
-                </li>
-
-
-                <!-- الفرقة الثالثة -->
-                <li class="menu-item"
-                    onclick="selectGrade('الفرقة الثالثة')">
-
-                    <span class="menu-icon">📙</span>
-
-                    الفرقة الثالثة
-
-                </li>
+    <div class="floating-contact-options">
 
 
-                <!-- الفرقة الرابعة -->
-                <li class="menu-item"
-                    onclick="selectGrade('الفرقة الرابعة')">
+        <!-- دعم المنصة -->
 
-                    <span class="menu-icon">📕</span>
+        <button
+            class="floating-contact-option"
+            id="supportBtn"
+            type="button"
+        >
 
-                    الفرقة الرابعة
+            <span class="floating-contact-icon">
+                ❤️
+            </span>
 
-                </li>
+            <span class="floating-contact-content">
 
+                <strong>
+                    دعم المنصة
+                </strong>
 
-                <!-- =========================
-                     سبورة الشرح
-                     مستقلة عن الفرق
-                ========================== -->
+                <small>
+                    يمكنك المساهمة في استمرار الخدمة وتطوير المنصة.
+                </small>
 
-                <li class="menu-item"
-                    onclick="openWhiteboard()">
+            </span>
 
-                    <span class="menu-icon">🖊️</span>
-
-                    سبورة الشرح
-
-                </li>
-
-            </ul>
-
-        </aside>
+        </button>
 
 
-        <!-- =========================
-             مساحة المحتوى
-        ========================== -->
 
-        <main class="content-area" id="contentArea">
+        <!-- التواصل -->
 
-            <!--
-                المحتوى يتم إنشاؤه
-                بواسطة JavaScript
-            -->
+        <a
+            href="https://wa.me/201551743249"
+            class="floating-contact-option"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
 
-        </main>
+            <span class="floating-contact-icon">
+                💬
+            </span>
+
+            <span class="floating-contact-content">
+
+                <strong>
+                    تواصل معنا
+                </strong>
+
+                <small>
+                    للمشاكل والملاحظات والاستفسارات
+                </small>
+
+            </span>
+
+        </a>
+
 
     </div>
 
 
-    <!-- =========================
-         الفوتر
-    ========================== -->
+    <!-- الزر الرئيسي -->
 
-    <footer class="main-footer">
+    <button
+        class="floating-contact-main"
+        id="floatingContactBtn"
+        type="button"
+        aria-label="الدعم والتواصل"
+        aria-expanded="false"
+    >
+        💬
+    </button>
 
-        <p>
-            جميع الحقوق محفوظة © كلية الهندسة الزراعية - جامعة الأزهر 2026
-        </p>
-
-
-        <div class="footer-contact">
-
-            <h4 class="footer-contact-title">
-                تواصل معنا
-            </h4>
+</div>
 
 
-            <div class="footer-social-links">
 
-                <a
-                    href="https://wa.me/201551743249"
-                    class="footer-social-link whatsapp-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
+<!-- =========================
+     نافذة دعم المنصة
+========================== -->
 
-                    <span class="social-icon">
-                        💬
+<div
+    class="support-modal"
+    id="supportModal"
+    aria-hidden="true"
+>
+
+    <div class="support-modal-content">
+
+
+        <!-- زر الإغلاق -->
+
+        <button
+            class="support-modal-close"
+            id="supportModalClose"
+            type="button"
+            aria-label="إغلاق"
+        >
+            ×
+        </button>
+
+
+        <!-- الأيقونة -->
+
+        <div class="support-modal-icon">
+            ❤️
+        </div>
+
+
+        <!-- العنوان -->
+
+        <h3>
+            دعم المنصة
+        </h3>
+
+
+        <!-- رسالة الدعم -->
+
+        <div class="support-message">
+
+
+            <p class="support-intro">
+                المنصة مجانية للجميع، واستمرارها وتطويرها يحتاج إلى تغطية تكاليف التشغيل والاستضافة.
+            </p>
+
+
+            <div class="support-points">
+
+
+                <!-- النقطة الأولى -->
+
+                <div class="support-point">
+
+                    <span class="support-point-icon">
+                        💰
                     </span>
 
-                    <span>
-                        تواصل معنا عبر واتساب
+                    <p>
+                        المنصة تحتاج إلى تكاليف تشغيل للتخزين وقاعدة البيانات،
+                        وإذا أردنا استمرارها وظهورها على الإنترنت بشكل دائم،
+                        سنحتاج إلى دعم يساعد في تغطية هذه التكاليف.
+                    </p>
+
+                </div>
+
+
+                <!-- النقطة الثانية -->
+
+                <div class="support-point">
+
+                    <span class="support-point-icon">
+                        
                     </span>
 
-                </a>
+                    <p>
+                        أي مساهمة، مهما كانت بسيطة، تساعد في استمرار المنصة
+                        وتطويرها وإضافة محتوى وخدمات أفضل.
+                    </p>
+
+                </div>
+
+
+                <!-- النقطة الثالثة -->
+
+                <div class="support-point">
+
+                    <span class="support-point-icon">
+                        ❤️
+                    </span>
+
+                    <p>
+                        ولو مش قادر تدعم ماديًا، مفيش مشكلة؛
+                        مجرد استخدامك للمنصة، ونشرها بين زملائك،
+                        وإرسال ملاحظاتك واقتراحاتك يعتبر دعمًا مهمًا جدًا.
+                    </p>
+
+                </div>
+
 
             </div>
 
         </div>
 
-    </footer>
 
 
-    <!-- =========================
-         Supabase
-    ========================== -->
+        <!-- =========================
+             رقم الكاش
+        ========================== -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <div class="cash-box">
+
+            <span>
+                رقم كاش
+            </span>
 
 
-    <!-- إعدادات Supabase -->
-    <script src="js/supabase-config.js"></script>
+            <strong id="cashNumber">
+                01554850896
+            </strong>
 
 
-    <!-- ملفات المشروع -->
-    <script src="js/data.js"></script>
+            <button
+                id="copyCashNumber"
+                type="button"
+            >
+                نسخ الرقم
+            </button>
 
-    <script src="js/navigation.js"></script>
+        </div>
 
-    <script src="js/ui.js"></script>
 
-    <script src="js/ai-assistant.js"></script>
+    </div>
 
-    <script src="js/app.js"></script>
+</div>
+
+
+
+<!-- =========================
+     زر العودة للأعلى
+========================== -->
+
+<button
+    id="scrollTopBtn"
+    onclick="scrollToTop()"
+    aria-label="العودة إلى أعلى الصفحة"
+>
+    ↑
+</button>
+
+
+
+<!-- =========================
+     الفوتر
+========================== -->
+
+<footer class="main-footer">
+
+    <p>
+        © 2026 Sameh Abobakr — منصة كلية الهندسة الزراعية
+    </p>
+
+</footer>
+
+
+
+<!-- =========================
+     Supabase Library
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+
+<!-- =========================
+     إعدادات Supabase
+========================== -->
+
+<script src="js/config.js"></script>
+
+
+
+<!-- =========================
+     حالة التطبيق
+========================== -->
+
+<script src="js/state.js"></script>
+
+
+
+<!-- =========================
+     البيانات الثابتة
+========================== -->
+
+<script src="js/data.js"></script>
+
+
+
+<!-- =========================
+     Supabase
+========================== -->
+
+<script src="js/supabase.js"></script>
+
+
+
+<!-- =========================
+     واجهة المستخدم
+========================== -->
+
+<script src="js/ui.js"></script>
+
+
+
+<!-- =========================
+     التنقل
+========================== -->
+
+<script src="js/navigation.js"></script>
+
+
+
+<!-- =========================
+     الأقسام
+========================== -->
+
+<script src="js/departments.js"></script>
+
+
+
+<!-- =========================
+     الصفحة الرئيسية
+========================== -->
+
+<script src="js/home.js"></script>
+
+
+
+<!-- =========================
+     المواد
+========================== -->
+
+<script src="js/subjects.js"></script>
+
+
+
+<!-- =========================
+     ملفات المواد
+========================== -->
+
+<script src="js/materials.js"></script>
+
+
+
+<!-- =========================
+     البحث
+========================== -->
+
+<script src="js/search.js"></script>
+
+
+
+<!-- =========================
+     المساعد الذكي
+========================== -->
+
+<script src="js/ai-assistant.js"></script>
+
+
+
+<!-- =========================
+     تشغيل التطبيق
+========================== -->
+
+<script src="js/app.js"></script>
 
 
 </body>

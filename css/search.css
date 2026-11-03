@@ -1,0 +1,41 @@
+/* =========================================
+   Search
+   صندوق البحث داخل صفحات المواد
+========================================= */
+
+.inner-search {
+    width: 100%;
+
+    padding: 10px 15px;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+
+    border-radius: 10px;
+
+    color: var(--text-main);
+
+    outline: none;
+
+    margin-bottom: 15px;
+
+    font-family: inherit;
+    font-size: 0.95rem;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+}
+
+.inner-search:focus {
+    border-color: var(--primary-color);
+
+    box-shadow:
+        0 0 0 2px rgba(16, 185, 129, 0.08);
+}
+
+.inner-search::placeholder {
+    color: var(--text-muted);
+    opacity: 0.75;
+}

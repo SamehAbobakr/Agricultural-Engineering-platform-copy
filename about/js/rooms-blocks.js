@@ -281,6 +281,188 @@ const RoomsBlocks = {
             ]);
         },
 
+card_grid(block) {
+    const items = Array.isArray(block.items) ? block.items : [];
+    if (!items.length) return null;
+
+    const section = RoomsUtils.el("div", {
+        className: "rm-b-card-grid"
+    });
+
+    const title = RoomsBlocks.text(block.title);
+
+    if (title) {
+        section.appendChild(
+            RoomsUtils.el("h4", {
+                className: "rm-b-section-title",
+                text: title
+            })
+        );
+    }
+
+    const grid = RoomsUtils.el("div", {
+        className: "rm-b-card-grid-inner"
+    });
+
+    items.forEach(item => {
+        if (!item || typeof item !== "object") return;
+
+        const card = RoomsUtils.el("article", {
+            className: "rm-b-card"
+        });
+
+        const icon = RoomsBlocks.text(item.icon);
+        const itemTitle = RoomsBlocks.text(item.title);
+        const description = RoomsBlocks.text(item.description);
+
+        if (icon) {
+            card.appendChild(
+                RoomsUtils.el("span", {
+                    className: "rm-b-card-icon",
+                    text: icon,
+                    attrs: { "aria-hidden": "true" }
+                })
+            );
+        }
+
+        if (itemTitle) {
+            card.appendChild(
+                RoomsUtils.el("h5", {
+                    className: "rm-b-card-title",
+                    text: itemTitle
+                })
+            );
+        }
+
+        if (description) {
+            card.appendChild(
+                RoomsUtils.el("p", {
+                    className: "rm-b-card-description",
+                    text: description
+                })
+            );
+        }
+
+        grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    return section;
+},
+
+steps(block) {
+    const items = Array.isArray(block.items) ? block.items : [];
+    if (!items.length) return null;
+
+    const section = RoomsUtils.el("div", {
+        className: "rm-b-steps"
+    });
+
+    const title = RoomsBlocks.text(block.title);
+
+    if (title) {
+        section.appendChild(
+            RoomsUtils.el("h4", {
+                className: "rm-b-section-title",
+                text: title
+            })
+        );
+    }
+
+    const list = RoomsUtils.el("div", {
+        className: "rm-b-steps-list"
+    });
+
+    items.forEach((item, index) => {
+        const data = typeof item === "string"
+            ? { title: item }
+            : item;
+
+        if (!data || typeof data !== "object") return;
+
+        const step = RoomsUtils.el("div", {
+            className: "rm-b-step"
+        });
+
+        step.appendChild(
+            RoomsUtils.el("span", {
+                className: "rm-b-step-number",
+                text: String(index + 1),
+                attrs: { "aria-hidden": "true" }
+            })
+        );
+
+        const content = RoomsUtils.el("div", {
+            className: "rm-b-step-content"
+        });
+
+        const stepTitle = RoomsBlocks.text(data.title);
+        const description = RoomsBlocks.text(data.description);
+
+        if (stepTitle) {
+            content.appendChild(
+                RoomsUtils.el("h5", {
+                    className: "rm-b-step-title",
+                    text: stepTitle
+                })
+            );
+        }
+
+        if (description) {
+            content.appendChild(
+                RoomsUtils.el("p", {
+                    className: "rm-b-step-description",
+                    text: description
+                })
+            );
+        }
+
+        step.appendChild(content);
+        list.appendChild(step);
+    });
+
+    section.appendChild(list);
+    return section;
+},
+
+tip_card(block) {
+    const title = RoomsBlocks.text(block.title);
+    const content = RoomsBlocks.text(block.text);
+
+    if (!title && !content) return null;
+
+    const variant = ["tip", "warning", "info"].includes(block.variant)
+        ? block.variant
+        : "tip";
+
+    const card = RoomsUtils.el("aside", {
+        className: "rm-b-tip-card"
+    });
+
+    card.classList.add("rm-b-tip-" + variant);
+
+    if (title) {
+        card.appendChild(
+            RoomsUtils.el("h4", {
+                className: "rm-b-tip-title",
+                text: title
+            })
+        );
+    }
+
+    if (content) {
+        card.appendChild(
+            RoomsUtils.el("p", {
+                className: "rm-b-tip-text",
+                text: content
+            })
+        );
+    }
+
+    return card;
+},
+
+
         divider() {
             return RoomsUtils.el('hr', { className: 'rm-divider' });
         }

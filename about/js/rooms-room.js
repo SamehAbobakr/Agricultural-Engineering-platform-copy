@@ -342,11 +342,7 @@ const RoomsRoomApp = {
             el('div', {
                 className: 'rm-room-titlerow'
             }, [
-                el('span', {
-                    className: 'rm-card-icon',
-                    text: room.icon,
-                    attrs: { 'aria-hidden': 'true' }
-                }),
+                
                 el('h1', {
                     className: 'rm-room-title',
                     text: room.title

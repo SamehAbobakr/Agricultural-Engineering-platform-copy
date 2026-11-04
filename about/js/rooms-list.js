@@ -341,6 +341,41 @@ const RoomsListApp = {
             }
 
 
+const coverUrl = RoomsUtils.httpUrl(room.cover);
+
+const visual = coverUrl
+    ? el('span', {
+        className: 'rm-card-media',
+        attrs: { 'aria-hidden': 'true' }
+    }, [
+        el('span', {
+            className: 'rm-card-icon',
+            text: room.icon
+        }),
+        el('img', {
+            className: 'rm-card-cover',
+            attrs: {
+                src: coverUrl,
+                alt: '',
+                loading: 'lazy',
+                decoding: 'async'
+            }
+        })
+    ])
+    : el('span', {
+        className: 'rm-card-icon',
+        text: room.icon
+    });
+
+// لو الصورة فشلت في التحميل، نزيلها وتظهر الأيقونة الموجودة خلفها.
+const coverImg = visual.querySelector('.rm-card-cover');
+
+if (coverImg) {
+    coverImg.addEventListener('error', function () {
+        coverImg.remove();
+    });
+}
+
 const side = el('span', {
     className: 'rm-card-side',
     attrs: { 'aria-hidden': 'true' }
@@ -349,10 +384,7 @@ const side = el('span', {
         className: 'rm-card-num',
         text: RoomsUtils.num(index + 1).padStart(2, '٠')
     }),
-    el('span', {
-        className: 'rm-card-icon',
-        text: room.icon
-    })
+    visual
 ]);
 
 grid.appendChild(el('a', {

@@ -282,9 +282,7 @@ const RoomsRoomApp = {
 
         RoomsUtils.clear(app.els.head);
 
-        const totalPoints = room.tasks.reduce(function (sum, task) {
-            return sum + task.points;
-        }, 0);
+        const totalPoints = room.totalPoints;
 
         const taskLabel = RoomsUtils.taskCount(room.tasks.length);
 

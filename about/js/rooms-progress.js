@@ -52,10 +52,10 @@ const RoomsProgress = {
         const total = room.tasks.length;
         let done = 0;
         let points = 0;
-        let totalPoints = 0;
+        // المتاح = مجموع الغرفة القادم من قاعدة البيانات (rooms.total_points)
+        const totalPoints = room.totalPoints;
 
         room.tasks.forEach(function (t) {
-            totalPoints += t.points;
             const c = RoomsProgress.completions.get(t.id);
             if (c) { done += 1; points += c.points; }
         });

@@ -1,8 +1,12 @@
 
 // js/ai-assistant.js
 
+// المساعد الذكي (Edge Function باسم smart-service) باقٍ كما هو على مشروعه الأصلي.
+// مفتاحه العام خاص بذلك المشروع، فلا يُستخدم معه SUPABASE_KEY الخاص بقاعدة بيانات الموقع (js/config.js).
+// لنقله لاحقًا إلى مشروع الموقع الجديد: انشر الدالة هناك وغيّر الثابتين التاليين فقط.
 const SMART_SERVICE_URL =
     "https://kegawnvzoimaddnziotv.supabase.co/functions/v1/smart-service";
+const SMART_SERVICE_KEY = "sb_publishable_0crKHKVfwNCtP5ieWDUpzg_4BeMZLkg";
 
 
 class SubjectAIAssistant {
@@ -283,8 +287,8 @@ class SubjectAIAssistant {
 
                     headers: {
                         "Content-Type": "application/json",
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                        "apikey": SMART_SERVICE_KEY,
+                        "Authorization": `Bearer ${SMART_SERVICE_KEY}`
                     },
 
                     body: JSON.stringify({

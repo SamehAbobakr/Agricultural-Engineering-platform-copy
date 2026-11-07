@@ -7,7 +7,9 @@
 
 > لم يُتحقق من هذه الإعدادات على مشروعك الحقيقي أثناء التطوير (لا وصول من بيئة التطوير إلى Supabase). كل ما هو مكتوب هنا قائمة ضبط واختبار، وليس إعلانًا بأنها مضبوطة.
 
-مشروع Supabase الحالي (من `js/config.js`): `https://kegawnvzoimaddnziotv.supabase.co`
+مشروع Supabase الحالي (من `js/config.js`): `https://nmukuzolpbkczqayzatp.supabase.co`
+
+> **مهم:** إعدادات المصادقة (Redirect URLs وGoogle وSMTP والقوالب) تخص **كل مشروع Supabase على حدة**. إن كنت قد ضبطتها على مشروع آخر قديم فيجب ضبطها من جديد على هذا المشروع، ثم اختبارها فعليًا قبل الإطلاق. والحسابات القديمة لا تنتقل بين المشروعين (يسجّل الطلاب من جديد).
 رابط الموقع: `https://samehabobakr.github.io/Agricultural-Engineering-platform/`
 
 ---
@@ -37,7 +39,7 @@
 1. APIs & Services → OAuth consent screen: اختر External، واكتب اسم التطبيق وبريد الدعم، ثم **Publish app** (وهو في حالة Testing لا يدخل إلا المستخدمون التجريبيون المضافون يدويًا).
 2. Credentials → Create credentials → OAuth client ID → النوع **Web application**.
 3. **Authorized JavaScript origins**: `https://samehabobakr.github.io`
-4. **Authorized redirect URIs**: `https://kegawnvzoimaddnziotv.supabase.co/auth/v1/callback`
+4. **Authorized redirect URIs**: `https://nmukuzolpbkczqayzatp.supabase.co/auth/v1/callback`
    (هذا رابط Supabase نفسه وليس رابط الموقع.)
 5. انسخ Client ID وClient Secret.
 

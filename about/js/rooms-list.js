@@ -6,6 +6,7 @@
 const RoomsListApp = {
 
     rooms: [],
+    selectedDifficulty: 'beginner',
     loading: false,
     loaded: false,
     lastUserId: null,
@@ -20,10 +21,33 @@ const RoomsListApp = {
             stats: byId('rmHeroStats'),
             progress: byId('rmProgress'),
             grid: byId('rmRoomsGrid'),
-            count: byId('rmRoomsCount')
+            count: byId('rmRoomsCount'),
+            filter: byId('rmDifficultyFilter')
         };
 
         if (!RoomsListApp.els.grid) return;
+        // التبديل بين مستويات الغرف
+if (RoomsListApp.els.filter) {
+    RoomsListApp.els.filter.addEventListener('click', function (event) {
+        const button = event.target.closest('.rm-difficulty-btn');
+
+        if (!button || !RoomsListApp.els.filter.contains(button)) return;
+
+        const difficulty = button.dataset.difficulty;
+
+        if (!['beginner', 'intermediate', 'advanced'].includes(difficulty)) return;
+
+        RoomsListApp.selectedDifficulty = difficulty;
+
+        RoomsListApp.els.filter.querySelectorAll('.rm-difficulty-btn').forEach(function (btn) {
+            const active = btn === button;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', String(active));
+        });
+
+        RoomsListApp.renderGrid();
+    });
+}
 
         RoomsListApp.renderSkeleton();
         RoomsListApp.load();
@@ -144,7 +168,7 @@ const RoomsListApp = {
         let points = 0;
         RoomsListApp.rooms.forEach(function (room) {
             tasks += room.tasks.length;
-            room.tasks.forEach(function (t) { points += t.points; });
+            points += room.totalPoints;
         });
 
         [
@@ -210,7 +234,12 @@ const RoomsListApp = {
         };
 
         const stats = el('ul', { className: 'rm-tiles' }, [
-            tile(RoomsUtils.num(o.points), 'نقطة مكتسبة', el('small', { text: 'من ' + RoomsUtils.num(o.totalPoints) })),
+            // نقاط الطالب = كل إنجازاته المسجّلة. وإن زادت عن المتاح فذلك لمهام عُدّلت/أُخفيت بعد إنجازها (لا نخفي الرقم ولا نعرض تناقضًا)
+            tile(RoomsUtils.num(o.points), 'نقطة مكتسبة', el('small', {
+                text: o.points > o.totalPoints
+                    ? 'تشمل مهامًا لم تعد معروضة'
+                    : 'من ' + RoomsUtils.num(o.totalPoints)
+            })),
             tile(RoomsUtils.num(o.done), 'مهمة مكتملة'),
             tile(RoomsUtils.num(o.remaining), 'مهمة متبقية'),
             tile(RoomsUtils.num(o.percent) + '٪', 'نسبة الإنجاز', RoomsUtils.progressBar(o.percent, 'نسبة الإنجاز الإجمالية'))
@@ -298,18 +327,35 @@ const RoomsListApp = {
         grid.setAttribute('aria-busy', 'false');
         RoomsUtils.clear(grid);
 
-        if (RoomsListApp.els.count) {
-            RoomsListApp.els.count.textContent = RoomsListApp.rooms.length ? RoomsUtils.num(RoomsListApp.rooms.length) : '';
-        }
+        const visibleRooms = RoomsListApp.rooms.filter(function (room) {
+    return room.difficulty === RoomsListApp.selectedDifficulty;
+});
 
-        if (!RoomsListApp.rooms.length) {
-            RoomsListApp.renderEmpty();
-            return;
-        }
+if (RoomsListApp.els.count) {
+    RoomsListApp.els.count.textContent = visibleRooms.length
+        ? RoomsUtils.num(visibleRooms.length) + ' غرفة'
+        : '0 غرفة';
+}
 
-        RoomsListApp.rooms.forEach(function (room, index) {
+if (!visibleRooms.length) {
+    const levelLabel = ROOMS_CONFIG.difficultyLabels[RoomsListApp.selectedDifficulty];
+
+    grid.appendChild(el('div', { className: 'rm-state' }, [
+        el('span', {
+            className: 'rm-state-icon',
+            text: '🌱',
+            attrs: { 'aria-hidden': 'true' }
+        }),
+        el('h3', { text: 'لا توجد غرف في هذا المستوى حاليًا' }),
+        el('p', { text: 'لم تتم إضافة غرف بمستوى ' + levelLabel + ' بعد.' })
+    ]));
+
+    return;
+}
+
+visibleRooms.forEach(function (room, index) {
             const p = RoomsProgress.forRoom(room);
-            const totalPoints = room.tasks.reduce(function (sum, t) { return sum + t.points; }, 0);
+            const totalPoints = room.totalPoints;
 
             const meta = el('span', { className: 'rm-card-meta' }, [
                 el('span', { className: 'rm-chip', text: '📋 ' + RoomsUtils.taskCount(room.tasks.length) }),

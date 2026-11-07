@@ -9,6 +9,8 @@
 | `index.html` | الصفحة الرئيسية (التطبيق كله يُرسم داخل `#contentArea` بواسطة JS) |
 | `about/about.html` + `about/room.html` |  المسار التعليمي = نظام الغرف والمهمات: القائمة والتقدم في `about.html`، والغرفة الواحدة في `room.html?room=<slug>`. الكود في `about/js/rooms-*.js` والتنسيق المعزول (أصناف `rm-*`) في `about/css/rooms.css` |
 | `tools/tools.html` | صفحة الأدوات، و`tools/study-timer.html` مؤقت المذاكرة (مستقل) |
+| `admin/` | **لوحة الإدارة**: تدير كل محتوى الموقع (المواد والملفات و«المزيد» وهيئة التدريس والمجتمع والغرف والمهام والأسئلة). بنفس تسجيل دخول المنصة ونفس هيدرها وفوترها وثيمها، ولا يدخلها إلا المسؤول (بريد يُضاف يدويًا). التفاصيل في `admin/README.md` |
+| `graduation/` | **معرض مشاريع التخرج**: `graduation.html` (الأرشيف: بحث/فلاتر/ترتيب) و`project.html?slug=...` (التفاصيل). ملفاته `js/graduation-*.js` و`css/graduation.css` (أصناف `gp-`). SQL في `database/graduation/`، وإدارته من لوحة الإدارة ← «مشاريع التخرج». غير مربوط بالهيدر عمدًا (انظر التقرير) |
 | `student_dashboard/` | لوحة إنجاز الطالب (`index.html` + `css/style.css` + `js/app.js`) |
 | `faculty/` | دليل أعضاء هيئة التدريس: `faculty.html` + `css/faculty.css` + `js/` (سبعة ملفات صغيرة، انظر أدناه) |
 | `css/` | تنسيقات مشتركة بين كل الصفحات (`variables.css` فيه الألوان والوضع الليلي/النهاري) |
@@ -16,7 +18,7 @@
 | `assets/images/icons/` | صور الأيقونات |
 | `js/support-widget.js` + `css/support-widget.css` | **زر الدعم والتواصل الموحد** (شخصية المنصة + قائمة «دعم المنصة/تواصل معنا» + نافذة الدعم). مكوّن واحد يُحقن في كل صفحة بسطر واحد `<script src="…/js/support-widget.js"></script>` قبل `</body>`، ويحمّل تنسيقه وصورته (`assets/images/support-mascot.png`) تلقائيًا. كل أصنافه تبدأ بـ `sw-`. رقم واتساب وفودافون كاش في أعلى الملف. لا تنسخ HTML الزر في الصفحات. |
 | `login.html` / `reset-password.html` | صفحتا الدخول/إنشاء الحساب/نسيت كلمة المرور، وتعيين كلمة مرور جديدة (واجهتهما `js/login.js` و`js/reset-password.js` وتنسيقهما `css/auth.css`) |
-| `database/` | ملفات SQL لجداول Supabase (تُشغَّل يدويًا من SQL Editor): `faculty_members.sql` و`student_dashboard.sql` و`rooms_progress.sql` (الجداول والأمان) ثم `rooms_seed.sql` (محتوى تجريبي) |
+| `database/` | ملفات SQL لجداول Supabase (تُشغَّل يدويًا من SQL Editor): `faculty_members.sql` و`student_dashboard.sql` و`rooms_progress.sql` (الجداول والأمان) ثم `rooms_seed.sql` (محتوى تجريبي). وفي `database/admin/`: `001_admin_setup.sql` و`002_add_admin.sql` (صلاحيات الإدارة وتحديد المسؤول) |
 | `docs/` | التوثيق: `auth-setup.md` (إعداد Google وSMTP وRedirect URLs) و`email-templates/` (قوالب رسائل التأكيد والاستعادة بالعربية) |
 | `.github/workflows/supabase-keepalive.yml` | يرسل طلبًا لـ Supabase كل 3 أيام حتى لا يتوقف المشروع المجاني |
 
@@ -42,6 +44,12 @@
 2. **أي رابط قادم من قاعدة البيانات** يمرّ على `safeUrl(...)` (يقبل `http` و`https` فقط).
 3. **لا تكتب بيانات داخل `onclick="..."` مباشرة.** استخدم `inlineArg(قيمة)` الموجودة في `js/ui.js`، فهي تمرّر رقمًا فقط وتمنع حقن الكود.
 4. مفتاح Supabase الموجود في `js/config.js` مفتاح **عام** (`publishable`) ومصمَّم للواجهة، وحمايته الحقيقية تكون بسياسات Row Level Security في Supabase. لا تضع أبدًا مفتاح `service_role` أو أي مفتاح سري في هذا المستودع.
+
+## قاعدة البيانات واحدة (الموقع + لوحة الإدارة)
+
+`js/config.js` هو **الملف الوحيد** الذي يحدد مشروع Supabase، ويقرأ منه الموقع كله ولوحة الإدارة ولوحة الطالب. قاعدة البيانات الحالية هي مشروع `nmukuzolpbkczqayzatp`، وكل ما يضيفه المسؤول من لوحة الإدارة يظهر في الموقع من نفس القاعدة.
+قبل أول تشغيل: الصق **Publishable Key** في `SUPABASE_KEY` داخل `js/config.js` (وإلا تظهر رسالة حمراء واضحة أعلى الصفحة)، ونفّذ `database/admin/001_admin_setup.sql` ثم `002_add_admin.sql`.
+المساعد الذكي (`js/ai-assistant.js`) بقي كما هو على دالته الأصلية، وله مفتاحه المستقل داخل الملف نفسه.
 
 ## الروابط بين الصفحات
 

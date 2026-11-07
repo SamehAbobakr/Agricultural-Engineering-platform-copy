@@ -1899,6 +1899,10 @@ html.dark .rm-task.is-open .rm-task-chevron {
     min-width: 0;
     padding-top: 5px;
 }
+ 
+
+
+
 
 /* Tip Card */
 .rm-b-tip-card {
@@ -1987,4 +1991,133 @@ html.dark .rm-task.is-open .rm-task-chevron {
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
+}
+
+/* =====================================
+   Premium Room Difficulty Filter
+===================================== */
+
+.rm-difficulty-filter {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 24px;
+    padding: 7px;
+    box-sizing: border-box;
+
+    background: var(--rm-primary-soft);
+    border: 1px solid var(--rm-line);
+    border-radius: 18px;
+}
+
+/* Base Button */
+
+.rm-difficulty-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 58px;
+    padding: 12px 6px;
+
+    border: 1px solid transparent;
+    border-radius: 13px;
+
+    background: transparent;
+    color: var(--rm-muted);
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+/* Hover */
+
+.rm-difficulty-btn:hover:not(.active) {
+    background: var(--rm-card);
+    color: var(--rm-text);
+    border-color: var(--rm-line);
+    transform: translateY(-2px);
+}
+
+/* Beginner - Green */
+
+.rm-difficulty-btn[data-difficulty="beginner"].active {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    border-color: #10b981;
+    box-shadow: 0 5px 16px rgba(16, 185, 129, 0.25);
+}
+
+/* Intermediate - Blue */
+
+.rm-difficulty-btn[data-difficulty="intermediate"].active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    border-color: #3b82f6;
+    box-shadow: 0 5px 16px rgba(59, 130, 246, 0.25);
+}
+
+/* Advanced - Purple */
+
+.rm-difficulty-btn[data-difficulty="advanced"].active {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    border-color: #a855f7;
+    box-shadow: 0 5px 16px rgba(168, 85, 247, 0.25);
+}
+
+/* Active */
+
+.rm-difficulty-btn.active {
+    transform: translateY(-2px);
+}
+
+/* Click */
+
+.rm-difficulty-btn:active {
+    transform: scale(0.97);
+}
+
+/* Focus */
+
+.rm-difficulty-btn:focus-visible {
+    outline: 2px solid var(--rm-secondary);
+    outline-offset: 3px;
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+    .rm-difficulty-filter {
+        gap: 6px;
+        padding: 5px;
+        border-radius: 14px;
+    }
+
+    .rm-difficulty-btn {
+        min-height: 49px;
+        padding: 10px 3px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+}
+
+/* Reduced Motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .rm-difficulty-btn {
+        transition: none;
+    }
 }

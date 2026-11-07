@@ -1,0 +1,22 @@
+window.__FIXTURES__ = [
+  { id: '1', slug: 'smart-irrigation-2025', title: 'نظام ري ذكي بالطاقة الشمسية', summary: 'نظام ري يعتمد على حساسات رطوبة التربة وألواح شمسية',
+    description: 'وصف تفصيلي\nفقرة ثانية', problem_statement: 'هدر المياه في الري التقليدي', objectives: ['تقليل الهدر', 'خفض التكلفة'],
+    methodology: 'تصميم ثم تصنيع ثم اختبار', department: 'هندسة نظم المياه والرى', graduation_year: 2025, project_field: 'الري', project_type: 'تصميم وتصنيع',
+    supervisor: 'د. أحمد علي', students: ['محمد أحمد', 'سارة محمود'], keywords: ['ري', 'طاقة شمسية', 'حساسات'],
+    cover_image: 'https://example.test/cover1.png', gallery_images: ['https://example.test/g1.png', 'https://example.test/g2.png', 'https://example.test/g3.png'],
+    video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', report_url: 'https://example.test/report.pdf',
+    external_links: [{ title: 'مرجع الفاو', url: 'https://example.test/fao' }, { title: 'x', url: 'javascript:alert(1)' }],
+    is_published: true, published_at: '2025-06-01T00:00:00Z', created_at: '2025-05-01T00:00:00Z' },
+  { id: '2', slug: 'tractor-engine-2024', title: 'تطوير محرك جرار زراعي', summary: 'تحسين كفاءة الاحتراق في محرك الجرار',
+    department: 'هندسة القوى والآلات الزراعية', graduation_year: 2024, project_field: 'القوى والآلات', project_type: 'بحث تطبيقي',
+    keywords: ['محرك', 'جرار'], is_published: true, published_at: '2024-06-01T00:00:00Z', created_at: '2024-05-01T00:00:00Z' },
+  { id: '3', slug: 'food-drying-2024', title: 'مجفف أغذية شمسي', summary: 'تجفيف الفواكه باستخدام الطاقة الشمسية',
+    department: 'هندسة تصنيع المنتجات الغذائية', graduation_year: 2024, project_field: 'تصنيع الأغذية', project_type: 'تصميم وتصنيع',
+    keywords: ['تجفيف'], is_published: true, published_at: '2024-07-01T00:00:00Z', created_at: '2024-05-02T00:00:00Z' },
+  { id: '4', slug: 'greenhouse-2023', title: 'صوبة زراعية ذكية', summary: 'تحكم بيئي آلي',
+    department: 'هندسة المنشآت الزراعية والتحكم البيئي', graduation_year: 2023, project_field: 'التحكم البيئي', project_type: 'محاكاة ونمذجة',
+    keywords: ['صوبة'], is_published: true, published_at: '2023-06-01T00:00:00Z', created_at: '2023-05-01T00:00:00Z' },
+  { id: '5', slug: 'draft-secret-2026', title: 'مشروع مسودة سري', summary: 'لا يجب أن يظهر',
+    department: 'الشعبة العامة', graduation_year: 2026, project_field: 'عام', project_type: 'بحث تطبيقي',
+    keywords: [], is_published: false, created_at: '2026-01-01T00:00:00Z' }
+];

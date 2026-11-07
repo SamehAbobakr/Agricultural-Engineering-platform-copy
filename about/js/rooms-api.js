@@ -50,14 +50,44 @@ const RoomsApi = {
             : null;
     },
 
+    // أعمدة الغرفة المطلوبة. عمود total_points يُطلب ما لم يثبت أنه غير موجود بعد
+    // (قبل تنفيذ 003_points_system.sql) فلا تتعطل الصفحة بسبب ترتيب النشر.
+    roomSelect() {
+        return RoomsApi.noTotalPoints
+            ? ROOMS_CONFIG.roomColumns
+            : ROOMS_CONFIG.roomColumns + ',' + ROOMS_CONFIG.roomPointsColumn;
+    },
+
+    // 42703 = undefined_column في PostgreSQL (يُرجعها PostgREST كذلك)
+    isMissingPointsColumn(error) {
+        return Boolean(
+            error &&
+            (error.code === '42703' ||
+                /total_points/i.test(String(error.message || '')))
+        );
+    },
+
+    // تنفّذ الاستعلام، وإن فشل بسبب غياب total_points تعيده مرة واحدة بدونه
+    async runRoomsQuery(build) {
+        let res = await RoomsApi.run(build);
+
+        if (res.error && !RoomsApi.noTotalPoints &&
+            RoomsApi.isMissingPointsColumn(res.error)) {
+            RoomsApi.noTotalPoints = true;
+            res = await RoomsApi.run(build);
+        }
+
+        return res;
+    },
+
     // كل الغرف المنشورة ومهماتها
     listRooms() {
         const T = ROOMS_CONFIG.tables;
 
-        return RoomsApi.run(function (c) {
+        return RoomsApi.runRoomsQuery(function (c) {
             return c.from(T.rooms)
                 .select(
-                    ROOMS_CONFIG.roomColumns +
+                    RoomsApi.roomSelect() +
                     ',' + T.tasks + '(id,points)'
                 )
                 .eq('is_active', true)
@@ -78,10 +108,10 @@ const RoomsApi = {
     getRoom(slug) {
         const T = ROOMS_CONFIG.tables;
 
-        return RoomsApi.run(function (c) {
+        return RoomsApi.runRoomsQuery(function (c) {
             return c.from(T.rooms)
                 .select(
-                    ROOMS_CONFIG.roomColumns +
+                    RoomsApi.roomSelect() +
                     ',' + T.tasks +
                     '(' + ROOMS_CONFIG.taskColumns + ')'
                 )
@@ -273,9 +303,19 @@ submitTaskAnswer(questionId, optionId) {
 
         const order = Number(raw.sort_order);
 
+        // مجموع نقاط الغرفة يأتي من قاعدة البيانات. إن لم يصل (قبل تنفيذ 003) نجمع نقاط المهام المعروضة
+        const dbTotal = raw.total_points === null || raw.total_points === undefined
+            ? NaN
+            : Number(raw.total_points);
+
+        const totalPoints = Number.isFinite(dbTotal)
+            ? dbTotal
+            : tasks.reduce(function (sum, t) { return sum + t.points; }, 0);
+
         return {
             id: id,
             slug: slug,
+            totalPoints: totalPoints,
             title: title,
             description: RoomsUtils.cleanText(raw.description),
             cover: RoomsUtils.cleanText(raw.cover_image),

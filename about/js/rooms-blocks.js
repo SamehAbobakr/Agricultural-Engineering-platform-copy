@@ -19,9 +19,13 @@ const RoomsBlocks = {
 
             const renderer = RoomsBlocks.renderers[block.type];
             if (!renderer) {
-                console.warn('نوع محتوى غير معروف في المهمة:', block.type);
-                return;
-            }
+            console.warn('عنصر محتوى غير معروف:', {
+                block: block,
+                type: block.type,
+                keys: Object.keys(block)
+            });
+            return;
+        }
 
             try {
                 const node = renderer(block, ctx);

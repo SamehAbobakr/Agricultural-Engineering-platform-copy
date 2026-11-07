@@ -13,6 +13,8 @@
  *      signUp / signIn / signInWithGoogle / sendPasswordReset / resendConfirmation / updatePassword.
  *      كلها تُرجع { ok, status, message, error } — الرسالة عربية جاهزة للعرض.
  *   5) معالجة الرجوع من رابط البريد أو من Google (PlatformAuth.callback) ووجهة العودة بعد الدخول.
+ *   6) زر «🛡️ لوحة الإدارة» في الهيدر وقائمة الموبايل للمسؤولين فقط (يسأل الدالة is_admin() في قاعدة البيانات).
+ *      الزر للعرض فقط؛ الحماية الفعلية في PostgreSQL (انظر database/admin/).
  *
  * ترتيب التحميل: يُحمَّل في <head> قبل header.js. لا يحتاج مكتبة Supabase ولا config.js
  * وقت التحميل؛ فهو يقرأهما عند أول استدعاء لـ getClient() (بعد تحميلهما).
@@ -105,6 +107,8 @@
 
         if (!window.supabase || typeof window.supabase.createClient !== 'function') return null;
         if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_KEY === 'undefined') return null;
+        /* config.js يضع سبب الرفض (مفتاح لم يُضبط أو مفتاح سري) ويعرض رسالة ظاهرة للمطوّر */
+        if (window.SUPABASE_CONFIG_ERROR) return null;
 
         client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         return client;
@@ -463,6 +467,8 @@
             if (event === 'SIGNED_OUT') purgeUserCaches();
             trackUser(currentSession);
             updateLinks();
+            /* تأجيل: لا نستدعي دوال العميل داخل callback الحدث مباشرة */
+            setTimeout(refreshAdminLink, 0);
             emit(event, currentSession);
         });
 
@@ -481,6 +487,105 @@
 
     function isSignedIn() {
         return Boolean(currentSession);
+    }
+
+    /* =========================================
+       المسؤول: زر «لوحة الإدارة» (عرض فقط) وفحص طازج للصفحة نفسها
+       is_admin() = بريد مضاف يدويًا في admin_emails + حساب مؤكَّد البريد (database/admin/).
+       النتيجة تُخزَّن في sessionStorage تحت agri_user_ فتُمسح مع الخروج وتبدّل الحساب.
+    ========================================= */
+    var ADMIN_CACHE_KEY = USER_CACHE_PREFIX + 'is_admin';
+
+    function adminUrl() {
+        return pageUrl('admin/index.html');
+    }
+
+    /**
+     * فحص مباشر من الخادم (بلا كاش) — تستعمله صفحة الإدارة نفسها.
+     * { admin: true|false, installed: false إن لم تُنفَّذ ملفات SQL, error }
+     */
+    function checkAdmin() {
+        var c = getClient();
+        if (!c) return Promise.resolve({ admin: false, installed: true, error: new Error('خدمة الحساب غير متاحة') });
+
+        return c.rpc('is_admin').then(function (res) {
+            if (res.error) {
+                var code = String(res.error.code || '');
+                var missing = code === 'PGRST202' || code === '42883';
+                return { admin: false, installed: !missing, error: res.error };
+            }
+
+            return { admin: res.data === true, installed: true, error: null };
+        }).catch(function (error) {
+            return { admin: false, installed: true, error: error };
+        });
+    }
+
+    function readAdminCache(userId) {
+        try {
+            var v = window.sessionStorage.getItem(ADMIN_CACHE_KEY) || '';
+            if (v.indexOf(userId + ':') !== 0) return null;
+            return v.slice(userId.length + 1) === '1';
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeAdminCache(userId, isAdmin) {
+        try { window.sessionStorage.setItem(ADMIN_CACHE_KEY, userId + ':' + (isAdmin ? '1' : '0')); } catch (e) { /* غير متاح */ }
+    }
+
+    function renderAdminLinks(show) {
+        var old = document.querySelectorAll('[data-admin-link]');
+        for (var i = 0; i < old.length; i++) old[i].parentNode.removeChild(old[i]);
+
+        if (!show) return;
+
+        var onAdmin = /\/admin\//.test(window.location.pathname);
+
+        var desktop = document.querySelector('.nav-desktop-actions');
+        if (desktop) {
+            var a = document.createElement('a');
+            a.className = 'nav-action-link';
+            a.href = adminUrl();
+            a.setAttribute('data-admin-link', '');
+            a.textContent = '🛡️ لوحة الإدارة';
+            if (onAdmin) a.setAttribute('aria-current', 'page');
+            desktop.insertBefore(a, desktop.firstChild);
+        }
+
+        var group = document.querySelector('#mobileNavDrawer .drawer-action-group');
+        if (group) {
+            var b = document.createElement('a');
+            b.className = 'drawer-action-btn';
+            b.href = adminUrl();
+            b.setAttribute('data-admin-link', '');
+            var icon = document.createElement('span');
+            icon.textContent = '🛡️';
+            b.appendChild(icon);
+            b.appendChild(document.createTextNode(' لوحة الإدارة'));
+            group.insertBefore(b, group.firstChild);
+        }
+    }
+
+    /** يُظهر الزر للمسؤول فقط. أي فشل (دالة غير مثبتة، انقطاع) = لا زر، بصمت. */
+    function refreshAdminLink() {
+        var user = currentSession && currentSession.user;
+
+        if (!user) { renderAdminLinks(false); return; }
+
+        var cached = readAdminCache(user.id);
+        if (cached !== null) { renderAdminLinks(cached); return; }
+
+        if (!getClient()) return;
+
+        checkAdmin().then(function (result) {
+            if (!currentSession || !currentSession.user || currentSession.user.id !== user.id) return;
+            if (result.error) { renderAdminLinks(false); return; }
+
+            writeAdminCache(user.id, result.admin);
+            renderAdminLinks(result.admin);
+        });
     }
 
     /* =========================================
@@ -607,6 +712,7 @@
             }
 
             updateLinks();
+            refreshAdminLink();
         });
 
         /* العودة من bfcache (زر الرجوع): الجلسة قد تكون تغيّرت أثناء غياب الصفحة */
@@ -617,6 +723,7 @@
                 if (result.error) return;
 
                 updateLinks();
+                refreshAdminLink();
                 emit('PAGESHOW', result.session);
             });
         });
@@ -630,6 +737,10 @@
         signOut: signOut,
         isSignedIn: isSignedIn,
         getUserId: getUserId,
+
+        /* المسؤول */
+        checkAdmin: checkAdmin,
+        adminUrl: adminUrl,
 
         /* عمليات الحساب */
         signUp: signUp,

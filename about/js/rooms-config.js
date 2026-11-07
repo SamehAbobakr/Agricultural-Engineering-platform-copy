@@ -15,6 +15,8 @@ const ROOMS_CONFIG = {
 
     // الأعمدة المطلوبة فقط (لا نستخدم select('*'))
     roomColumns: 'id,title,slug,description,cover_image,icon,sort_order,difficulty',
+    // مجموع نقاط الغرفة مشتق في قاعدة البيانات (database/admin/003_points_system.sql)
+    roomPointsColumn: 'total_points',
     taskColumns: 'id,title,description,points,sort_order',
 
     // صفحة الغرفة (مسار نسبي: تعمل على GitHub Pages داخل مسار فرعي)
